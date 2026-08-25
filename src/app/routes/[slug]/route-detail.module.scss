@@ -1,0 +1,108 @@
+@use 'sass:color';
+@use '../../../styles/tokens' as *;
+
+.back {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: $granite-soft;
+  margin-bottom: 1.25rem;
+
+  &:hover {
+    color: $arrow;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.5rem;
+}
+
+.nameEn {
+  color: $granite-soft;
+  margin-bottom: 0.6rem;
+}
+
+.endpoints {
+  font-size: 1rem;
+  color: $granite-mid;
+  margin: 0;
+}
+
+.arrow {
+  color: $arrow;
+  font-weight: 700;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1px;
+  background: $edge;
+  border: 1px solid $edge;
+  border-radius: $radius;
+  overflow: hidden;
+  margin: 0;
+}
+
+.fact {
+  background: $paper;
+  padding: 0.9rem 1rem;
+}
+
+.factLabel {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $granite-soft;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.factValue {
+  font-family: $serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.prose {
+  line-height: 1.7;
+  color: $granite-mid;
+}
+
+.aside {
+  background: $arrow-soft;
+  border: 1px solid color.adjust($arrow-soft, $lightness: -8%);
+  border-radius: $radius;
+  padding: 1.25rem;
+}
+
+.asideHeading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+
+.asideLabel {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $moderate;
+  font-weight: 600;
+}
+
+.asideValue {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: $granite;
+  margin-bottom: 0.9rem;
+}
+
+.sectionHeading {
+  font-size: 1.4rem;
+  margin-bottom: 0.35rem;
+}

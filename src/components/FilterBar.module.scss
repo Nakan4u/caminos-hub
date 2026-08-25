@@ -1,0 +1,80 @@
+@use '../styles/tokens' as *;
+
+.bar {
+  background: $paper;
+  border: 1px solid $edge;
+  border-radius: $radius;
+  padding: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: $granite-soft;
+  margin-bottom: 0.35rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  border: 1px solid $edge-strong;
+  background: transparent;
+  color: $granite-mid;
+  border-radius: 100px;
+  padding: 0.28rem 0.75rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.12s ease;
+
+  &:hover {
+    border-color: $arrow;
+    color: $granite;
+  }
+}
+
+.chipActive {
+  background: $arrow;
+  border-color: $arrow;
+  color: #3a2c00;
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid $edge;
+}
+
+.count {
+  font-size: 0.9rem;
+  color: $granite-mid;
+
+  strong {
+    font-family: $serif;
+    font-size: 1.05rem;
+    color: $granite;
+  }
+}
+
+.pending {
+  opacity: 0.55;
+}

@@ -6,19 +6,42 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:up": "podman run -d --name caminohub-db -e POSTGRES_PASSWORD=caminohub -e POSTGRES_DB=caminohub -p 5432:5432 postgres:16",
+    "db:start": "podman start caminohub-db",
+    "db:stop": "podman stop caminohub-db",
+    "db:down": "podman rm -f caminohub-db",
+    "db:logs": "podman logs -f caminohub-db",
+    "db:studio": "prisma studio",
+    "migrate": "prisma migrate dev",
+    "seed": "prisma db seed",
+    "generate": "prisma generate",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "bootstrap": "^5.3.8",
+    "dotenv": "^17.4.2",
     "next": "16.3.2",
+    "pg": "^8.23.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
-    "typescript": "^5"
+    "prisma": "^7.10.0",
+    "sass": "^1.103.1",
+    "tsx": "^4.23.12",
+    "typescript": "^5",
+    "vitest": "^4.1.11"
   }
 }

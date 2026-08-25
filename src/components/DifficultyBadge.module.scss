@@ -1,0 +1,33 @@
+@use '../styles/tokens' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  border: 1px solid currentColor;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.EASY {
+  color: $easy;
+}
+
+.MODERATE {
+  color: $moderate;
+}
+
+.HARD {
+  color: $hard;
+}

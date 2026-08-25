@@ -1,0 +1,77 @@
+@use '../styles/tokens' as *;
+
+.wrapper {
+  overflow-x: auto;
+  border: 1px solid $edge;
+  border-radius: $radius;
+  background: $paper;
+}
+
+.table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th,
+  td {
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: $granite-soft;
+    border-bottom: 1px solid $edge;
+    white-space: nowrap;
+  }
+
+  tbody tr + tr {
+    border-top: 1px solid $edge;
+  }
+
+  tbody tr:hover {
+    background: rgba(232, 163, 0, 0.05);
+  }
+}
+
+.order {
+  font-family: $serif;
+  color: $granite-soft;
+  width: 2.5rem;
+}
+
+.leg {
+  font-weight: 500;
+}
+
+.arrow {
+  color: $arrow;
+  font-weight: 700;
+  margin: 0 0.35rem;
+}
+
+.numeric {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.cumulative {
+  color: $granite-soft;
+}
+
+.notes {
+  color: $granite-mid;
+  font-size: 0.83rem;
+  line-height: 1.45;
+  max-width: 34ch;
+}
+
+.long {
+  color: $hard;
+  font-weight: 600;
+}

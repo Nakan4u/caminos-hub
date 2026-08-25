@@ -1,0 +1,98 @@
+@use 'sass:color';
+@use './tokens' as *;
+
+:root {
+  --bs-body-bg: #{$limestone};
+  --bs-body-color: #{$granite};
+  --bs-body-font-family: #{$sans};
+  // Bootstrap 5.3 resolves link colour through the -rgb custom properties,
+  // so overriding --bs-link-color alone has no effect.
+  --bs-link-color: #{$granite};
+  --bs-link-color-rgb: #{color.channel($granite, 'red')}, #{color.channel($granite, 'green')}, #{color.channel($granite, 'blue')};
+  --bs-link-hover-color: #{$arrow};
+  --bs-link-hover-color-rgb: #{color.channel($arrow, 'red')}, #{color.channel($arrow, 'green')}, #{color.channel($arrow, 'blue')};
+  --bs-border-color: #{$edge};
+  --bs-primary: #{$arrow};
+}
+
+body {
+  background-color: $limestone;
+  color: $granite;
+  font-family: $sans;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: $serif;
+  letter-spacing: -0.01em;
+}
+
+a {
+  text-decoration: none;
+}
+
+.site-header {
+  background: $paper;
+  border-bottom: 1px solid $edge;
+}
+
+.site-header__brand {
+  font-family: $serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: $granite;
+
+  span {
+    color: $arrow;
+  }
+}
+
+.site-header__nav a {
+  color: $granite-mid;
+  font-size: 0.925rem;
+
+  &:hover {
+    color: $arrow;
+  }
+}
+
+.site-footer {
+  border-top: 1px solid $edge;
+  color: $granite-soft;
+  font-size: 0.85rem;
+}
+
+.page-title {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  margin-bottom: 0.35rem;
+}
+
+.page-lede {
+  color: $granite-mid;
+  max-width: 62ch;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $granite-soft;
+}
+
+.btn-arrow {
+  background: $arrow;
+  border-color: $arrow;
+  color: #3a2c00;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    background: color.adjust($arrow, $lightness: -6%);
+    border-color: color.adjust($arrow, $lightness: -6%);
+    color: #3a2c00;
+  }
+}

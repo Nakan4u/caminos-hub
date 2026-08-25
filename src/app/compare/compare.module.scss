@@ -1,0 +1,70 @@
+@use '../../styles/tokens' as *;
+
+.wrapper {
+  overflow-x: auto;
+  border: 1px solid $edge;
+  border-radius: $radius;
+  background: $paper;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th,
+  td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  tbody tr + tr {
+    border-top: 1px solid $edge;
+  }
+
+  tbody tr:hover {
+    background: rgba(232, 163, 0, 0.05);
+  }
+}
+
+.rowLabel {
+  width: 150px;
+  min-width: 150px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $granite-soft;
+  font-weight: 600;
+  background: $limestone;
+  white-space: nowrap;
+}
+
+.routeHead {
+  min-width: 190px;
+  border-bottom: 1px solid $edge;
+
+  a {
+    display: block;
+    font-family: $serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $granite;
+
+    &:hover {
+      color: $arrow;
+    }
+  }
+}
+
+.routeHeadEn {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: $granite-soft;
+}
+
+.cell {
+  color: $granite-mid;
+  line-height: 1.5;
+}

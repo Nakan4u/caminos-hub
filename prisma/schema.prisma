@@ -1,0 +1,53 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Difficulty {
+  EASY
+  MODERATE
+  HARD
+}
+
+model Route {
+  id          Int        @id @default(autoincrement())
+  slug        String     @unique
+  name        String
+  nameEs      String
+  summary     String
+  description String
+  totalKm     Int
+  typicalDays Int
+  difficulty  Difficulty
+  startPlace  String
+  endPlace    String
+  countries   String[]
+  waymarking  String
+  bestSeason  String
+  popularity  Int
+  isUnesco    Boolean    @default(false)
+  stages      Stage[]
+
+  @@index([totalKm])
+  @@index([difficulty])
+}
+
+model Stage {
+  id         Int     @id @default(autoincrement())
+  routeId    Int
+  route      Route   @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  order      Int
+  fromPlace  String
+  toPlace    String
+  distanceKm Float
+  ascentM    Int?
+  notes      String?
+
+  @@unique([routeId, order])
+  @@index([routeId])
+}

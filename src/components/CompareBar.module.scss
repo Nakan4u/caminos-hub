@@ -1,0 +1,30 @@
+@use '../styles/tokens' as *;
+
+.bar {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 0.75rem 1rem;
+  background: $granite;
+  color: $paper;
+  border-radius: $radius;
+  box-shadow: 0 10px 30px rgba(47, 58, 63, 0.25);
+}
+
+.count {
+  font-weight: 600;
+}
+
+.hint {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+.spacer {
+  margin-left: auto;
+}
