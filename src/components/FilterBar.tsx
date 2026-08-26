@@ -25,6 +25,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
   const t = useTranslations('FilterBar')
   const tDifficulty = useTranslations('Difficulty')
   const tSort = useTranslations('Sort')
+  const tCountries = useTranslations('Countries')
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
@@ -191,7 +192,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
                       )
                     }
                   >
-                    {country}
+                    {tCountries(`names.${country}`)}
                   </button>
                 )
               })}

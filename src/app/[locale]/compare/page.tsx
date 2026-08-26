@@ -29,6 +29,7 @@ export default async function ComparePage({
   const { locale } = await params
   const t = await getTranslations('Compare')
   const tFormat = await getTranslations('Format')
+  const tCountries = await getTranslations('Countries')
 
   const raw = (await searchParams).routes
   const slugs = [
@@ -66,10 +67,14 @@ export default async function ComparePage({
     },
     { label: t('rowStarts'), render: (route) => route.startPlace },
     { label: t('rowFinishes'), render: (route) => route.endPlace },
-    { label: t('rowCountries'), render: (route) => route.countries.join(', ') },
+    {
+      label: t('rowCountries'),
+      render: (route) => route.countries.map((country) => tCountries(`names.${country}`)).join(', '),
+    },
     {
       label: t('rowAverageDay'),
-      render: (route) => formatKm(route.totalKm / route.typicalDays, tFormat),
+      render: (route) =>
+        tFormat('km', { km: (route.totalKm / route.typicalDays).toFixed(1) }),
     },
     { label: t('rowPilgrims'), render: (route) => formatPopularity(route.popularity, tFormat) },
     { label: t('rowBestSeason'), render: (route) => route.bestSeason },

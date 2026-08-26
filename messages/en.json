@@ -114,7 +114,12 @@
     "name": "Name (A–Z)"
   },
   "Countries": {
-    "count": "{count, plural, one {country} other {countries}}"
+    "count": "{count, plural, one {country} other {countries}}",
+    "names": {
+      "France": "France",
+      "Spain": "Spain",
+      "Portugal": "Portugal"
+    }
   },
   "Format": {
     "km": "{km} km",

@@ -114,7 +114,12 @@
     "name": "Назва (А–Я)"
   },
   "Countries": {
-    "count": "{count, plural, one {країна} few {країни} many {країн} other {країни}}"
+    "count": "{count, plural, one {країна} few {країни} many {країн} other {країни}}",
+    "names": {
+      "France": "Франція",
+      "Spain": "Іспанія",
+      "Portugal": "Португалія"
+    }
   },
   "Format": {
     "km": "{km} км",

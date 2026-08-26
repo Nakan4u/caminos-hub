@@ -34,6 +34,7 @@ export default async function RouteDetailPage({
   const t = await getTranslations('RouteDetail')
   const tFormat = await getTranslations('Format')
   const tDifficulty = await getTranslations('Difficulty')
+  const tCountries = await getTranslations('Countries')
 
   const longestStage = route.stages.reduce((longest, stage) =>
     stage.distanceKm > longest.distanceKm ? stage : longest,
@@ -67,7 +68,7 @@ export default async function RouteDetailPage({
       <header className={styles.header}>
         <div>
           <p className="eyebrow mb-2">
-            {route.countries.join(' · ')}
+            {route.countries.map((country) => tCountries(`names.${country}`)).join(' · ')}
             {route.isUnesco && ` · ${t('unesco')}`}
           </p>
           <h1 className="page-title mb-1">{route.nameEs}</h1>

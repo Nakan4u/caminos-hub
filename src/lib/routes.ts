@@ -4,12 +4,17 @@ import { buildRouteQuery } from '@/lib/route-query'
 import { localizeRoute, localizeStage } from '@/lib/localize'
 import type { RouteFilters } from '@/lib/filters'
 
+/** Locale plus its English fallback, deduped — `resolveField` only ever needs these two rows. */
+function localeAndFallback(locale: string): string[] {
+  return locale === 'en' ? ['en'] : [locale, 'en']
+}
+
 export async function listRoutes(filters: RouteFilters, locale: string) {
   const { where, orderBy } = buildRouteQuery(filters, locale)
   const routes = await prisma.route.findMany({
     where,
     orderBy,
-    include: { translations: true },
+    include: { translations: { where: { locale: { in: localeAndFallback(locale) } } } },
   })
   const localized = routes.map((route) => localizeRoute(route, locale))
 
@@ -24,8 +29,11 @@ export async function getRouteBySlug(slug: string, locale: string) {
   const route = await prisma.route.findUnique({
     where: { slug },
     include: {
-      translations: true,
-      stages: { orderBy: { order: 'asc' }, include: { translations: true } },
+      translations: { where: { locale: { in: localeAndFallback(locale) } } },
+      stages: {
+        orderBy: { order: 'asc' },
+        include: { translations: { where: { locale: { in: localeAndFallback(locale) } } } },
+      },
     },
   })
   if (!route) return null
@@ -40,7 +48,7 @@ export async function getRouteBySlug(slug: string, locale: string) {
 export async function getRoutesBySlugs(slugs: string[], locale: string) {
   const routes = await prisma.route.findMany({
     where: { slug: { in: slugs } },
-    include: { translations: true },
+    include: { translations: { where: { locale: { in: localeAndFallback(locale) } } } },
   })
   const bySlug = new Map(routes.map((route) => [route.slug, route]))
   return slugs

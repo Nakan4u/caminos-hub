@@ -112,6 +112,12 @@ facet key — only its display label is translated. Currently two representative
 routes (`camino-frances`, `camino-portugues-central`) have full Ukrainian content;
 the rest fall back to English until translated.
 
+The migration that introduced these translation tables
+(`20260826211238_add_translation_tables`) drops the old flat text columns from
+`Route` and `Stage` with no backfill — exactly like any other schema change here,
+run `npx prisma migrate dev` followed by `npx prisma db seed` to repopulate route
+and stage content afterward.
+
 ## Not in this version
 
 Maps, accommodation data, and user accounts and saved itineraries. A route map is
