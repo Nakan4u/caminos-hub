@@ -6,6 +6,9 @@ export interface SeedStage {
   distanceKm: number
   ascentM?: number
   notes?: string
+  translations?: {
+    uk?: Partial<Pick<SeedStage, 'fromPlace' | 'toPlace' | 'notes'>>
+  }
 }
 
 export interface SeedRoute {
@@ -26,6 +29,11 @@ export interface SeedRoute {
   popularity: number
   isUnesco: boolean
   stages: SeedStage[]
+  translations?: {
+    uk?: Partial<
+      Pick<SeedRoute, 'name' | 'summary' | 'description' | 'startPlace' | 'endPlace' | 'waymarking' | 'bestSeason'>
+    >
+  }
 }
 
 export const officialRoutes: SeedRoute[] = [
@@ -47,40 +55,53 @@ export const officialRoutes: SeedRoute[] = [
     bestSeason: 'May–June and September–October',
     popularity: 217000,
     isUnesco: true,
+    translations: {
+      uk: {
+        name: 'Французький шлях',
+        summary:
+          'Класичний перехід через північну Іспанію — маршрут, який мають на увазі майже всі фільми й книги, коли кажуть «Каміно».',
+        description:
+          'Французький шлях веде від Сен-Жан-Пье-де-Пор у французьких Піренеях через Наварру, Ріоху, Кастилію і Леон та Галісію до Сантьяго-де-Компостели. Це найбільш ходжений, найкраще облаштований і найжвавіший у соціальному плані з усіх маршрутів: альберги через кожні кілька кілометрів, розмітка, яку можна впізнати навіть напівсонним, і мандрівна спільнота пілігримів, що відновлюється щовечора.\n\nВін радше довгий, ніж технічно складний. Два справжні випробування — це перший день через Піренеї до Ронсесвальєс і підйом до О Себрейро в останній третині маршруту; між ними лежить Месета, три тижні рівнинної місцевості, яка перемагає більше людей одноманітністю, ніж перепадом висот. Завдяки чудовому забезпеченню інфраструктурою це найпростіший маршрут, яким можна йти без попереднього планування.',
+        startPlace: 'Сен-Жан-Пье-де-Пор',
+        endPlace: 'Сантьяго-де-Компостела',
+        waymarking: 'Відмінна — суцільні жовті стрілки та позначки у вигляді мушлі гребінця',
+        bestSeason: 'Травень–червень та вересень–жовтень',
+      },
+    },
     stages: [
-      { fromPlace: 'Saint-Jean-Pied-de-Port', toPlace: 'Roncesvalles', distanceKm: 25.1, ascentM: 1390, notes: 'The hardest day on the route. The Napoleon route over the pass closes in winter; the Valcarlos alternative stays open.' },
-      { fromPlace: 'Roncesvalles', toPlace: 'Zubiri', distanceKm: 21.9, ascentM: 220 },
-      { fromPlace: 'Zubiri', toPlace: 'Pamplona', distanceKm: 20.9, ascentM: 230 },
-      { fromPlace: 'Pamplona', toPlace: 'Puente la Reina', distanceKm: 23.8, ascentM: 420, notes: 'Over the Alto del Perdón, with its iron pilgrim sculptures.' },
-      { fromPlace: 'Puente la Reina', toPlace: 'Estella', distanceKm: 21.9, ascentM: 350 },
-      { fromPlace: 'Estella', toPlace: 'Los Arcos', distanceKm: 21.6, ascentM: 310, notes: 'Passes the free wine fountain at Bodegas Irache, two kilometres in.' },
-      { fromPlace: 'Los Arcos', toPlace: 'Logroño', distanceKm: 27.8, ascentM: 340 },
-      { fromPlace: 'Logroño', toPlace: 'Nájera', distanceKm: 29.6, ascentM: 400 },
-      { fromPlace: 'Nájera', toPlace: 'Santo Domingo de la Calzada', distanceKm: 21.0, ascentM: 280 },
-      { fromPlace: 'Santo Domingo de la Calzada', toPlace: 'Belorado', distanceKm: 22.0, ascentM: 230 },
-      { fromPlace: 'Belorado', toPlace: 'San Juan de Ortega', distanceKm: 24.2, ascentM: 590 },
-      { fromPlace: 'San Juan de Ortega', toPlace: 'Burgos', distanceKm: 25.8, ascentM: 210 },
-      { fromPlace: 'Burgos', toPlace: 'Hornillos del Camino', distanceKm: 21.0, ascentM: 200, notes: 'The Meseta begins here.' },
-      { fromPlace: 'Hornillos del Camino', toPlace: 'Castrojeriz', distanceKm: 20.1, ascentM: 160 },
-      { fromPlace: 'Castrojeriz', toPlace: 'Frómista', distanceKm: 24.7, ascentM: 220 },
-      { fromPlace: 'Frómista', toPlace: 'Carrión de los Condes', distanceKm: 19.3, ascentM: 90 },
-      { fromPlace: 'Carrión de los Condes', toPlace: 'Terradillos de los Templarios', distanceKm: 26.6, ascentM: 130, notes: 'Seventeen kilometres without a village, water or shade. Fill up before leaving.' },
-      { fromPlace: 'Terradillos de los Templarios', toPlace: 'El Burgo Ranero', distanceKm: 30.6, ascentM: 180 },
-      { fromPlace: 'El Burgo Ranero', toPlace: 'Mansilla de las Mulas', distanceKm: 18.8, ascentM: 70 },
-      { fromPlace: 'Mansilla de las Mulas', toPlace: 'León', distanceKm: 18.5, ascentM: 130 },
-      { fromPlace: 'León', toPlace: 'Villar de Mazarife', distanceKm: 21.3, ascentM: 150 },
-      { fromPlace: 'Villar de Mazarife', toPlace: 'Astorga', distanceKm: 30.9, ascentM: 290 },
-      { fromPlace: 'Astorga', toPlace: 'Rabanal del Camino', distanceKm: 20.6, ascentM: 520 },
-      { fromPlace: 'Rabanal del Camino', toPlace: 'Molinaseca', distanceKm: 25.6, ascentM: 430, notes: 'Over the Cruz de Ferro at 1,500 m, where pilgrims leave a stone carried from home.' },
-      { fromPlace: 'Molinaseca', toPlace: 'Villafranca del Bierzo', distanceKm: 30.5, ascentM: 340 },
-      { fromPlace: 'Villafranca del Bierzo', toPlace: 'O Cebreiro', distanceKm: 27.8, ascentM: 940, notes: 'The second big climb, entering Galicia at 1,300 m.' },
-      { fromPlace: 'O Cebreiro', toPlace: 'Triacastela', distanceKm: 20.7, ascentM: 200 },
-      { fromPlace: 'Triacastela', toPlace: 'Sarria', distanceKm: 18.4, ascentM: 280 },
-      { fromPlace: 'Sarria', toPlace: 'Portomarín', distanceKm: 22.2, ascentM: 400, notes: 'Sarria is the 100 km mark, the minimum for a Compostela — the route gets markedly busier from here.' },
-      { fromPlace: 'Portomarín', toPlace: 'Palas de Rei', distanceKm: 24.8, ascentM: 560 },
-      { fromPlace: 'Palas de Rei', toPlace: 'Arzúa', distanceKm: 28.5, ascentM: 480 },
-      { fromPlace: 'Arzúa', toPlace: 'O Pedrouzo', distanceKm: 19.1, ascentM: 290 },
-      { fromPlace: 'O Pedrouzo', toPlace: 'Santiago de Compostela', distanceKm: 19.4, ascentM: 340 },
+      { fromPlace: 'Saint-Jean-Pied-de-Port', toPlace: 'Roncesvalles', distanceKm: 25.1, ascentM: 1390, notes: 'The hardest day on the route. The Napoleon route over the pass closes in winter; the Valcarlos alternative stays open.', translations: { uk: { fromPlace: 'Сен-Жан-Пье-де-Пор', toPlace: 'Ронсесвальєс', notes: 'Найважчий день маршруту. Наполеонівський шлях через перевал взимку закривається; альтернативний маршрут через Валькарлос залишається відкритим.' } } },
+      { fromPlace: 'Roncesvalles', toPlace: 'Zubiri', distanceKm: 21.9, ascentM: 220, translations: { uk: { fromPlace: 'Ронсесвальєс', toPlace: 'Субірі' } } },
+      { fromPlace: 'Zubiri', toPlace: 'Pamplona', distanceKm: 20.9, ascentM: 230, translations: { uk: { fromPlace: 'Субірі', toPlace: 'Памплона' } } },
+      { fromPlace: 'Pamplona', toPlace: 'Puente la Reina', distanceKm: 23.8, ascentM: 420, notes: 'Over the Alto del Perdón, with its iron pilgrim sculptures.', translations: { uk: { fromPlace: 'Памплона', toPlace: 'Пуенте-ла-Рейна', notes: 'Через перевал Альто-дель-Пердон з його залізними скульптурами пілігримів.' } } },
+      { fromPlace: 'Puente la Reina', toPlace: 'Estella', distanceKm: 21.9, ascentM: 350, translations: { uk: { fromPlace: 'Пуенте-ла-Рейна', toPlace: 'Естелья' } } },
+      { fromPlace: 'Estella', toPlace: 'Los Arcos', distanceKm: 21.6, ascentM: 310, notes: 'Passes the free wine fountain at Bodegas Irache, two kilometres in.', translations: { uk: { fromPlace: 'Естелья', toPlace: 'Лос-Аркос', notes: 'Через два кілометри шлях проходить повз безкоштовне винне джерело в Бодегас Іраче.' } } },
+      { fromPlace: 'Los Arcos', toPlace: 'Logroño', distanceKm: 27.8, ascentM: 340, translations: { uk: { fromPlace: 'Лос-Аркос', toPlace: 'Логроньйо' } } },
+      { fromPlace: 'Logroño', toPlace: 'Nájera', distanceKm: 29.6, ascentM: 400, translations: { uk: { fromPlace: 'Логроньйо', toPlace: 'Нахера' } } },
+      { fromPlace: 'Nájera', toPlace: 'Santo Domingo de la Calzada', distanceKm: 21.0, ascentM: 280, translations: { uk: { fromPlace: 'Нахера', toPlace: 'Санто-Домінго-де-ла-Кальсада' } } },
+      { fromPlace: 'Santo Domingo de la Calzada', toPlace: 'Belorado', distanceKm: 22.0, ascentM: 230, translations: { uk: { fromPlace: 'Санто-Домінго-де-ла-Кальсада', toPlace: 'Белорадо' } } },
+      { fromPlace: 'Belorado', toPlace: 'San Juan de Ortega', distanceKm: 24.2, ascentM: 590, translations: { uk: { fromPlace: 'Белорадо', toPlace: 'Сан-Хуан-де-Ортега' } } },
+      { fromPlace: 'San Juan de Ortega', toPlace: 'Burgos', distanceKm: 25.8, ascentM: 210, translations: { uk: { fromPlace: 'Сан-Хуан-де-Ортега', toPlace: 'Бургос' } } },
+      { fromPlace: 'Burgos', toPlace: 'Hornillos del Camino', distanceKm: 21.0, ascentM: 200, notes: 'The Meseta begins here.', translations: { uk: { fromPlace: 'Бургос', toPlace: 'Орнільйос-дель-Каміно', notes: 'Тут починається Месета.' } } },
+      { fromPlace: 'Hornillos del Camino', toPlace: 'Castrojeriz', distanceKm: 20.1, ascentM: 160, translations: { uk: { fromPlace: 'Орнільйос-дель-Каміно', toPlace: 'Кастрохеріс' } } },
+      { fromPlace: 'Castrojeriz', toPlace: 'Frómista', distanceKm: 24.7, ascentM: 220, translations: { uk: { fromPlace: 'Кастрохеріс', toPlace: 'Фроміста' } } },
+      { fromPlace: 'Frómista', toPlace: 'Carrión de los Condes', distanceKm: 19.3, ascentM: 90, translations: { uk: { fromPlace: 'Фроміста', toPlace: 'Каррьйон-де-лос-Кондес' } } },
+      { fromPlace: 'Carrión de los Condes', toPlace: 'Terradillos de los Templarios', distanceKm: 26.6, ascentM: 130, notes: 'Seventeen kilometres without a village, water or shade. Fill up before leaving.', translations: { uk: { fromPlace: 'Каррьйон-де-лос-Кондес', toPlace: 'Террадільйос-де-лос-Темпларіос', notes: 'Сімнадцять кілометрів без села, води чи тіні. Поповніть запаси перед виходом.' } } },
+      { fromPlace: 'Terradillos de los Templarios', toPlace: 'El Burgo Ranero', distanceKm: 30.6, ascentM: 180, translations: { uk: { fromPlace: 'Террадільйос-де-лос-Темпларіос', toPlace: 'Ель-Бурго-Ранеро' } } },
+      { fromPlace: 'El Burgo Ranero', toPlace: 'Mansilla de las Mulas', distanceKm: 18.8, ascentM: 70, translations: { uk: { fromPlace: 'Ель-Бурго-Ранеро', toPlace: 'Мансілья-де-лас-Мулас' } } },
+      { fromPlace: 'Mansilla de las Mulas', toPlace: 'León', distanceKm: 18.5, ascentM: 130, translations: { uk: { fromPlace: 'Мансілья-де-лас-Мулас', toPlace: 'Леон' } } },
+      { fromPlace: 'León', toPlace: 'Villar de Mazarife', distanceKm: 21.3, ascentM: 150, translations: { uk: { fromPlace: 'Леон', toPlace: 'Вільяр-де-Масаріфе' } } },
+      { fromPlace: 'Villar de Mazarife', toPlace: 'Astorga', distanceKm: 30.9, ascentM: 290, translations: { uk: { fromPlace: 'Вільяр-де-Масаріфе', toPlace: 'Асторга' } } },
+      { fromPlace: 'Astorga', toPlace: 'Rabanal del Camino', distanceKm: 20.6, ascentM: 520, translations: { uk: { fromPlace: 'Асторга', toPlace: 'Рабанал-дель-Каміно' } } },
+      { fromPlace: 'Rabanal del Camino', toPlace: 'Molinaseca', distanceKm: 25.6, ascentM: 430, notes: 'Over the Cruz de Ferro at 1,500 m, where pilgrims leave a stone carried from home.', translations: { uk: { fromPlace: 'Рабанал-дель-Каміно', toPlace: 'Молінасека', notes: 'Через Крус-де-Ферро на висоті 1500 м, де пілігрими залишають камінь, принесений з дому.' } } },
+      { fromPlace: 'Molinaseca', toPlace: 'Villafranca del Bierzo', distanceKm: 30.5, ascentM: 340, translations: { uk: { fromPlace: 'Молінасека', toPlace: 'Вільяфранка-дель-Бʼєрсо' } } },
+      { fromPlace: 'Villafranca del Bierzo', toPlace: 'O Cebreiro', distanceKm: 27.8, ascentM: 940, notes: 'The second big climb, entering Galicia at 1,300 m.', translations: { uk: { fromPlace: 'Вільяфранка-дель-Бʼєрсо', toPlace: 'О Себрейро', notes: 'Другий великий підйом, вхід до Галісії на висоті 1300 м.' } } },
+      { fromPlace: 'O Cebreiro', toPlace: 'Triacastela', distanceKm: 20.7, ascentM: 200, translations: { uk: { fromPlace: 'О Себрейро', toPlace: 'Тріакастела' } } },
+      { fromPlace: 'Triacastela', toPlace: 'Sarria', distanceKm: 18.4, ascentM: 280, translations: { uk: { fromPlace: 'Тріакастела', toPlace: 'Саррія' } } },
+      { fromPlace: 'Sarria', toPlace: 'Portomarín', distanceKm: 22.2, ascentM: 400, notes: 'Sarria is the 100 km mark, the minimum for a Compostela — the route gets markedly busier from here.', translations: { uk: { fromPlace: 'Саррія', toPlace: 'Портомарін', notes: 'Саррія — позначка 100 км, мінімальна відстань для отримання «Компостели»; від цього місця маршрут стає помітно жвавішим.' } } },
+      { fromPlace: 'Portomarín', toPlace: 'Palas de Rei', distanceKm: 24.8, ascentM: 560, translations: { uk: { fromPlace: 'Портомарін', toPlace: 'Палас-де-Рей' } } },
+      { fromPlace: 'Palas de Rei', toPlace: 'Arzúa', distanceKm: 28.5, ascentM: 480, translations: { uk: { fromPlace: 'Палас-де-Рей', toPlace: 'Арсуа' } } },
+      { fromPlace: 'Arzúa', toPlace: 'O Pedrouzo', distanceKm: 19.1, ascentM: 290, translations: { uk: { fromPlace: 'Арсуа', toPlace: 'О Педроусо' } } },
+      { fromPlace: 'O Pedrouzo', toPlace: 'Santiago de Compostela', distanceKm: 19.4, ascentM: 340, translations: { uk: { fromPlace: 'О Педроусо', toPlace: 'Сантьяго-де-Компостела' } } },
     ],
   },
   {
@@ -101,18 +122,31 @@ export const officialRoutes: SeedRoute[] = [
     bestSeason: 'April–June and September–October',
     popularity: 120000,
     isUnesco: false,
+    translations: {
+      uk: {
+        name: 'Португальський шлях (Центральний)',
+        summary:
+          'Другий за популярністю Каміно: римські дороги, гранітні села та виноградники від Порту на північ до Галісії.',
+        description:
+          'Історичний Португальський шлях починається в Лісабоні і охоплює близько 620 км, але переважна більшість пілігримів вирушає з Порту, і етапи, наведені тут, охоплюють саме цю розмічену ділянку в 240 км. Він перетинає річку Мінью у Валенсі, переходячи в Туй, а далі прямує на північ через Понтеведру і Падрон до Сантьяго.\n\nЦе найлегший з великих маршрутів. Тут немає гірського перевалу, денні відстані помірні, а шлях чергує бруковані римські дороги, евкаліптові гаї та річкові долини. Єдиний недолік — велика кількість асфальту в перші два дні з Порту, які багато пілігримів пропускають, починаючи маршрут північніше.',
+        startPlace: 'Порту',
+        endPlace: 'Сантьяго-де-Компостела',
+        waymarking: 'Дуже добра — жовті стрілки в Іспанії, а сині стрілки позначають зворотний маршрут до Фатіми',
+        bestSeason: 'Квітень–червень та вересень–жовтень',
+      },
+    },
     stages: [
-      { fromPlace: 'Porto', toPlace: 'Vairão', distanceKm: 27.0, ascentM: 210, notes: 'Largely urban and paved. Many pilgrims take the metro as far as Vilar do Pinheiro to skip it.' },
-      { fromPlace: 'Vairão', toPlace: 'Barcelos', distanceKm: 29.0, ascentM: 380 },
-      { fromPlace: 'Barcelos', toPlace: 'Ponte de Lima', distanceKm: 33.0, ascentM: 430, notes: 'The longest day on the route; often split at Balugães.' },
-      { fromPlace: 'Ponte de Lima', toPlace: 'Rubiães', distanceKm: 18.0, ascentM: 540, notes: 'The steep climb over the Alto da Portela Grande is the toughest ascent of the Portuguese Way.' },
-      { fromPlace: 'Rubiães', toPlace: 'Tui', distanceKm: 19.0, ascentM: 130, notes: 'Crosses the Minho into Spain over the Valença–Tui bridge.' },
-      { fromPlace: 'Tui', toPlace: 'Porriño', distanceKm: 16.0, ascentM: 120 },
-      { fromPlace: 'Porriño', toPlace: 'Redondela', distanceKm: 15.0, ascentM: 290 },
-      { fromPlace: 'Redondela', toPlace: 'Pontevedra', distanceKm: 19.0, ascentM: 310 },
-      { fromPlace: 'Pontevedra', toPlace: 'Caldas de Reis', distanceKm: 21.0, ascentM: 250 },
-      { fromPlace: 'Caldas de Reis', toPlace: 'Padrón', distanceKm: 19.0, ascentM: 210 },
-      { fromPlace: 'Padrón', toPlace: 'Santiago de Compostela', distanceKm: 25.0, ascentM: 380 },
+      { fromPlace: 'Porto', toPlace: 'Vairão', distanceKm: 27.0, ascentM: 210, notes: 'Largely urban and paved. Many pilgrims take the metro as far as Vilar do Pinheiro to skip it.', translations: { uk: { fromPlace: 'Порту', toPlace: 'Вайран', notes: 'Здебільшого міський та асфальтований відрізок. Багато пілігримів їдуть на метро до Вілар-ду-Піньєйру, щоб оминути його.' } } },
+      { fromPlace: 'Vairão', toPlace: 'Barcelos', distanceKm: 29.0, ascentM: 380, translations: { uk: { fromPlace: 'Вайран', toPlace: 'Барселуш' } } },
+      { fromPlace: 'Barcelos', toPlace: 'Ponte de Lima', distanceKm: 33.0, ascentM: 430, notes: 'The longest day on the route; often split at Balugães.', translations: { uk: { fromPlace: 'Барселуш', toPlace: 'Понте-де-Ліма', notes: 'Найдовший день маршруту; часто розбивають на два, зупиняючись у Балугайнш.' } } },
+      { fromPlace: 'Ponte de Lima', toPlace: 'Rubiães', distanceKm: 18.0, ascentM: 540, notes: 'The steep climb over the Alto da Portela Grande is the toughest ascent of the Portuguese Way.', translations: { uk: { fromPlace: 'Понте-де-Ліма', toPlace: 'Рубіайнш', notes: 'Крутий підйом через Алту-да-Портела-Гранде — найважчий підйом на Португальському шляху.' } } },
+      { fromPlace: 'Rubiães', toPlace: 'Tui', distanceKm: 19.0, ascentM: 130, notes: 'Crosses the Minho into Spain over the Valença–Tui bridge.', translations: { uk: { fromPlace: 'Рубіайнш', toPlace: 'Туй', notes: 'Перетинає річку Мінью до Іспанії мостом Валенса–Туй.' } } },
+      { fromPlace: 'Tui', toPlace: 'Porriño', distanceKm: 16.0, ascentM: 120, translations: { uk: { fromPlace: 'Туй', toPlace: 'Порріньйо' } } },
+      { fromPlace: 'Porriño', toPlace: 'Redondela', distanceKm: 15.0, ascentM: 290, translations: { uk: { fromPlace: 'Порріньйо', toPlace: 'Редондела' } } },
+      { fromPlace: 'Redondela', toPlace: 'Pontevedra', distanceKm: 19.0, ascentM: 310, translations: { uk: { fromPlace: 'Редондела', toPlace: 'Понтеведра' } } },
+      { fromPlace: 'Pontevedra', toPlace: 'Caldas de Reis', distanceKm: 21.0, ascentM: 250, translations: { uk: { fromPlace: 'Понтеведра', toPlace: 'Кальдас-де-Рейс' } } },
+      { fromPlace: 'Caldas de Reis', toPlace: 'Padrón', distanceKm: 19.0, ascentM: 210, translations: { uk: { fromPlace: 'Кальдас-де-Рейс', toPlace: 'Падрон' } } },
+      { fromPlace: 'Padrón', toPlace: 'Santiago de Compostela', distanceKm: 25.0, ascentM: 380, translations: { uk: { fromPlace: 'Падрон', toPlace: 'Сантьяго-де-Компостела' } } },
     ],
   },
   {

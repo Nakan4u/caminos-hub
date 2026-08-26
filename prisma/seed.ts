@@ -14,12 +14,30 @@ async function main() {
   // Stages cascade from Route, so clearing routes clears everything.
   await prisma.route.deleteMany()
 
-  for (const { stages, ...route } of officialRoutes) {
+  for (const { stages, translations, name, summary, description, startPlace, endPlace, waymarking, bestSeason, ...route } of officialRoutes) {
     await prisma.route.create({
       data: {
         ...route,
+        translations: {
+          create: [
+            { locale: 'en', name, summary, description, startPlace, endPlace, waymarking, bestSeason },
+            ...(translations?.uk ? [{ locale: 'uk', ...translations.uk }] : []),
+          ],
+        },
         stages: {
-          create: stages.map((stage, index) => ({ ...stage, order: index + 1 })),
+          create: stages.map((stage, index) => {
+            const { fromPlace, toPlace, notes, translations: stageTranslations, ...rest } = stage
+            return {
+              ...rest,
+              order: index + 1,
+              translations: {
+                create: [
+                  { locale: 'en', fromPlace, toPlace, notes },
+                  ...(stageTranslations?.uk ? [{ locale: 'uk', ...stageTranslations.uk }] : []),
+                ],
+              },
+            }
+          }),
         },
       },
     })

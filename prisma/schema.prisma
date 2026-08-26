@@ -17,21 +17,15 @@ enum Difficulty {
 model Route {
   id          Int        @id @default(autoincrement())
   slug        String     @unique
-  name        String
   nameEs      String
-  summary     String
-  description String
   totalKm     Int
   typicalDays Int
   difficulty  Difficulty
-  startPlace  String
-  endPlace    String
   countries   String[]
-  waymarking  String
-  bestSeason  String
   popularity  Int
   isUnesco    Boolean    @default(false)
   stages      Stage[]
+  translations RouteTranslation[]
 
   @@index([totalKm])
   @@index([difficulty])
@@ -42,12 +36,40 @@ model Stage {
   routeId    Int
   route      Route   @relation(fields: [routeId], references: [id], onDelete: Cascade)
   order      Int
-  fromPlace  String
-  toPlace    String
   distanceKm Float
   ascentM    Int?
-  notes      String?
+  translations StageTranslation[]
 
   @@unique([routeId, order])
   @@index([routeId])
+}
+
+model RouteTranslation {
+  id          Int    @id @default(autoincrement())
+  routeId     Int
+  route       Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  locale      String
+  name        String?
+  summary     String?
+  description String?
+  startPlace  String?
+  endPlace    String?
+  waymarking  String?
+  bestSeason  String?
+
+  @@unique([routeId, locale])
+  @@index([locale])
+}
+
+model StageTranslation {
+  id        Int    @id @default(autoincrement())
+  stageId   Int
+  stage     Stage  @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  locale    String
+  fromPlace String?
+  toPlace   String?
+  notes     String?
+
+  @@unique([stageId, locale])
+  @@index([locale])
 }
