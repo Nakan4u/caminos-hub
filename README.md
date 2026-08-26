@@ -64,7 +64,7 @@ src/
 │   ├── route-query.ts        RouteFilters -> Prisma where/orderBy, pure
 │   ├── routes.ts             The only module that touches the database
 │   └── format.ts             Display helpers
-├── app/
+├── app/[locale]/
 │   ├── page.tsx              Catalog: filters + card grid
 │   ├── routes/[slug]/        Detail: stats, description, stage table
 │   └── compare/              Side-by-side table for up to 4 routes
@@ -99,10 +99,23 @@ Distances and stage divisions follow common guidebook conventions and are approx
 statistics. This is a reference for comparing routes, not a substitute for a current
 guidebook.
 
+## Localization
+
+The app is locale-prefixed (`/en/...`, `/uk/...`) via `next-intl`, with a `[locale]`
+segment wrapping every page and UI chrome strings kept in `messages/en.json` /
+`messages/uk.json`. Route and stage content (name, summary, description, place
+names, stage notes) is translatable too, stored in `RouteTranslation` /
+`StageTranslation` tables keyed by locale, with English used as a per-field
+fallback wherever a translation is missing. `nameEs` (the route's native-language
+name) always renders regardless of locale, and `countries` stays an untranslated
+facet key — only its display label is translated. Currently two representative
+routes (`camino-frances`, `camino-portugues-central`) have full Ukrainian content;
+the rest fall back to English until translated.
+
 ## Not in this version
 
-Maps, accommodation data, user accounts and saved itineraries, and i18n (English
-only). A route map is the intended next step: `Stage` would gain nullable
-`lat`/`lng`, populated by a one-off geocoding script and drawn with Leaflet over free
-OpenStreetMap tiles. Stage place names are already kept clean so that script will
-work without manual cleanup.
+Maps, accommodation data, and user accounts and saved itineraries. A route map is
+the intended next step: `Stage` would gain nullable `lat`/`lng`, populated by a
+one-off geocoding script and drawn with Leaflet over free OpenStreetMap tiles.
+Stage place names are already kept clean so that script will work without manual
+cleanup.

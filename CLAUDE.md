@@ -36,12 +36,16 @@ Data flow for a filtered page load: `searchParams` → `src/lib/filters.ts` (`Ro
 
 **No `react-bootstrap`.** Bootstrap 5's stylesheet (`src/styles/globals.scss`) supplies reset/grid/utilities only; component styling is Sass Modules, one `Component.module.scss` beside each `Component.tsx`. This is what keeps most pages Server Components — only `FilterBar` and the compare selection (`CompareProvider`/`CompareBar`/`CompareToggle`) are client-side.
 
-- `src/app/page.tsx` — catalog: filters + card grid
-- `src/app/routes/[slug]/` — detail: stats, description, stage table
-- `src/app/compare/` — side-by-side table for up to 4 routes (state via `CompareProvider`)
+- `src/app/[locale]/page.tsx` — catalog: filters + card grid
+- `src/app/[locale]/routes/[slug]/` — detail: stats, description, stage table
+- `src/app/[locale]/compare/` — side-by-side table for up to 4 routes (state via `CompareProvider`)
 
 `prisma.config.ts` + `src/lib/prisma.ts` provide a dev-HMR-safe `PrismaClient` singleton, driven by `@prisma/adapter-pg`. The generated client lives in `src/generated/prisma` (not `node_modules/@prisma/client`) per the `output` path in `prisma/schema.prisma` — import from there via the `@/` alias, not the default Prisma package location.
 
+## Localization
+
+Routes are locale-prefixed (`/en/...`, `/uk/...`, `localePrefix: 'always'`) via `next-intl`, with every page living under `src/app/[locale]/`; `src/proxy.ts` handles locale negotiation/redirects, and UI chrome strings live in `messages/en.json`/`messages/uk.json`. Translatable route/stage data (`name`, `summary`, `description`, `startPlace`, `endPlace`, `waymarking`, `bestSeason` on routes; `fromPlace`, `toPlace`, `notes` on stages) lives in `RouteTranslation`/`StageTranslation` tables keyed by `(routeId, locale)`/`(stageId, locale)`, resolved per-field to the current locale with English fallback via `src/lib/localize.ts`. `nameEs` is a permanent, always-shown native-name column on `Route` and is **not** part of this locale system; `countries` stays an untranslated facet key (translated only for display, via the `Countries` message namespace). Only two sample routes (`camino-frances`, `camino-portugues-central`) have full Ukrainian content today — the rest fall back to English by design.
+
 ## Scope notes
 
-No maps, accommodation data, user accounts, or i18n (English only) — see README "Not in this version" before adding any of these. `Stage` has no `lat`/`lng` yet; a future map feature would add nullable columns and a geocoding script, not a new data source.
+No maps, accommodation data, or user accounts — see README "Not in this version" before adding any of these. `Stage` has no `lat`/`lng` yet; a future map feature would add nullable columns and a geocoding script, not a new data source.
