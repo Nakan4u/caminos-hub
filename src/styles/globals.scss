@@ -2,24 +2,47 @@
 @use './tokens' as *;
 
 :root {
-  --bs-body-bg: #{$limestone};
-  --bs-body-color: #{$granite};
+  --color-bg: #{$limestone};
+  --color-surface: #{$paper};
+  --color-text: #{$granite};
+  --color-text-mid: #{$granite-mid};
+  --color-text-soft: #{$granite-soft};
+  --color-border: #{$edge};
+  --color-border-strong: #{$edge-strong};
+  --color-arrow-soft: #{$arrow-soft};
+
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
   --bs-body-font-family: #{$sans};
   // Bootstrap 5.3 resolves link colour through the -rgb custom properties,
   // so overriding --bs-link-color alone has no effect.
-  --bs-link-color: #{$granite};
+  --bs-link-color: var(--color-text);
   --bs-link-color-rgb: #{color.channel($granite, 'red')}, #{color.channel($granite, 'green')}, #{color.channel($granite, 'blue')};
   --bs-link-hover-color: #{$arrow};
   --bs-link-hover-color-rgb: #{color.channel($arrow, 'red')}, #{color.channel($arrow, 'green')}, #{color.channel($arrow, 'blue')};
-  --bs-border-color: #{$edge};
+  --bs-border-color: var(--color-border);
   --bs-primary: #{$arrow};
 }
 
+:root[data-theme='dark'] {
+  --color-bg: #{$granite-dark-bg};
+  --color-surface: #{$granite-dark-surface};
+  --color-text: #{$granite-dark-text};
+  --color-text-mid: #{$granite-dark-text-mid};
+  --color-text-soft: #{$granite-dark-text-soft};
+  --color-border: #{$granite-dark-edge};
+  --color-border-strong: #{$granite-dark-edge-strong};
+  --color-arrow-soft: #{$arrow-soft-dark};
+
+  --bs-link-color-rgb: #{color.channel($granite-dark-text, 'red')}, #{color.channel($granite-dark-text, 'green')}, #{color.channel($granite-dark-text, 'blue')};
+}
+
 body {
-  background-color: $limestone;
-  color: $granite;
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: $sans;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 h1,
@@ -35,15 +58,15 @@ a {
 }
 
 .site-header {
-  background: $paper;
-  border-bottom: 1px solid $edge;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .site-header__brand {
   font-family: $serif;
   font-size: 1.35rem;
   font-weight: 600;
-  color: $granite;
+  color: var(--color-text);
 
   span {
     color: $arrow;
@@ -51,7 +74,7 @@ a {
 }
 
 .site-header__nav a {
-  color: $granite-mid;
+  color: var(--color-text-mid);
   font-size: 0.925rem;
 
   &:hover {
@@ -60,8 +83,8 @@ a {
 }
 
 .site-footer {
-  border-top: 1px solid $edge;
-  color: $granite-soft;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-soft);
   font-size: 0.85rem;
 }
 
@@ -71,7 +94,7 @@ a {
 }
 
 .page-lede {
-  color: $granite-mid;
+  color: var(--color-text-mid);
   max-width: 62ch;
 }
 
@@ -80,7 +103,7 @@ a {
   letter-spacing: 0.09em;
   font-size: 0.72rem;
   font-weight: 600;
-  color: $granite-soft;
+  color: var(--color-text-soft);
 }
 
 .btn-arrow {

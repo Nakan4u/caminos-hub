@@ -14,6 +14,17 @@ $easy:     #3f7d5a;
 $moderate: #b8791f;
 $hard:     #a8402f;
 
+// Dark-theme counterparts for the surface/text/border tokens above.
+// Accent ($arrow) and difficulty colours stay the same in both themes.
+$granite-dark-bg:          #1b1f22;
+$granite-dark-surface:     #23282b;
+$granite-dark-text:        #f3efe6;
+$granite-dark-text-mid:    #b7c0c4;
+$granite-dark-text-soft:   #838d92;
+$granite-dark-edge:        #33393c;
+$granite-dark-edge-strong: #454c50;
+$arrow-soft-dark:          rgba(232, 163, 0, 0.16);
+
 $radius:    10px;
 $radius-sm: 6px;
 
