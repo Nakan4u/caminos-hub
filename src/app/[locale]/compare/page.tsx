@@ -20,10 +20,13 @@ export async function generateMetadata({
 const MAX_COMPARE = 4
 
 export default async function ComparePage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>
   searchParams: Promise<SearchParams>
 }) {
+  const { locale } = await params
   const t = await getTranslations('Compare')
   const tFormat = await getTranslations('Format')
 
@@ -37,7 +40,7 @@ export default async function ComparePage({
     ),
   ].slice(0, MAX_COMPARE)
 
-  const routes = await getRoutesBySlugs(slugs)
+  const routes = await getRoutesBySlugs(slugs, locale)
 
   if (routes.length === 0) {
     return (

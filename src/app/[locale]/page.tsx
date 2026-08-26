@@ -7,13 +7,19 @@ import { CompareProvider } from '@/components/CompareProvider'
 import { CompareBar } from '@/components/CompareBar'
 
 export default async function CatalogPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>
   searchParams: Promise<SearchParams>
 }) {
+  const { locale } = await params
   const t = await getTranslations('Catalog')
   const filters = parseFilters(await searchParams)
-  const [routes, countries] = await Promise.all([listRoutes(filters), listCountries()])
+  const [routes, countries] = await Promise.all([
+    listRoutes(filters, locale),
+    listCountries(),
+  ])
 
   return (
     <>

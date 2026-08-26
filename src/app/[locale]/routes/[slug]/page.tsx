@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { locale, slug } = await params
-  const route = await getRouteBySlug(slug)
+  const route = await getRouteBySlug(slug, locale)
   if (!route) {
     const t = await getTranslations({ locale, namespace: 'RouteDetail' })
     return { title: t('notFoundTitle') }
@@ -27,8 +27,8 @@ export default async function RouteDetailPage({
 }: {
   params: Promise<{ locale: string; slug: string }>
 }) {
-  const { slug } = await params
-  const route = await getRouteBySlug(slug)
+  const { locale, slug } = await params
+  const route = await getRouteBySlug(slug, locale)
   if (!route) notFound()
 
   const t = await getTranslations('RouteDetail')

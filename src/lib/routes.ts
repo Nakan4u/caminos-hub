@@ -1,25 +1,52 @@
 import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { buildRouteQuery } from '@/lib/route-query'
+import { localizeRoute, localizeStage } from '@/lib/localize'
 import type { RouteFilters } from '@/lib/filters'
 
-export async function listRoutes(filters: RouteFilters) {
-  const { where, orderBy } = buildRouteQuery(filters)
-  return prisma.route.findMany({ where, orderBy })
+export async function listRoutes(filters: RouteFilters, locale: string) {
+  const { where, orderBy } = buildRouteQuery(filters, locale)
+  const routes = await prisma.route.findMany({
+    where,
+    orderBy,
+    include: { translations: true },
+  })
+  const localized = routes.map((route) => localizeRoute(route, locale))
+
+  if (filters.sort === 'name') {
+    localized.sort((a, b) => a.name.localeCompare(b.name, locale))
+  }
+
+  return localized
 }
 
-export async function getRouteBySlug(slug: string) {
-  return prisma.route.findUnique({
+export async function getRouteBySlug(slug: string, locale: string) {
+  const route = await prisma.route.findUnique({
     where: { slug },
-    include: { stages: { orderBy: { order: 'asc' } } },
+    include: {
+      translations: true,
+      stages: { orderBy: { order: 'asc' }, include: { translations: true } },
+    },
   })
+  if (!route) return null
+
+  return {
+    ...localizeRoute(route, locale),
+    stages: route.stages.map((stage) => localizeStage(stage, locale)),
+  }
 }
 
 /** Returns the requested routes in the order the caller asked for them. */
-export async function getRoutesBySlugs(slugs: string[]) {
-  const routes = await prisma.route.findMany({ where: { slug: { in: slugs } } })
+export async function getRoutesBySlugs(slugs: string[], locale: string) {
+  const routes = await prisma.route.findMany({
+    where: { slug: { in: slugs } },
+    include: { translations: true },
+  })
   const bySlug = new Map(routes.map((route) => [route.slug, route]))
-  return slugs.map((slug) => bySlug.get(slug)).filter((route) => route !== undefined)
+  return slugs
+    .map((slug) => bySlug.get(slug))
+    .filter((route) => route !== undefined)
+    .map((route) => localizeRoute(route, locale))
 }
 
 /** Every country any route passes through, for the filter bar. */

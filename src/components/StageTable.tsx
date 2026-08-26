@@ -38,7 +38,7 @@ export async function StageTable({ stages }: { stages: RouteWithStages['stages']
           {rows.map(({ stage, cumulative }) => {
             const isLong = stage.distanceKm >= LONG_STAGE_KM
             return (
-              <tr key={stage.id}>
+              <tr key={stage.order}>
                 <td className={styles.order}>{stage.order}</td>
                 <td className={styles.leg}>
                   {stage.fromPlace}
