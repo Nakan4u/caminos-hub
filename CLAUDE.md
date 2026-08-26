@@ -11,7 +11,7 @@ nvm use                    # Node 22, per .nvmrc — Prisma 7 CLI requires Node 
 npm install
 npm run dev                # dev server, localhost:3000
 
-npm run db:up               # first-time: create + start Postgres 16 container (podman)
+npm run db:up               # first-time: create + start Postgres 16 container (docker)
 npm run db:start            # subsequent: start existing container
 npx prisma migrate dev      # apply schema
 npx prisma db seed          # load the 15 routes / 191 stages from src/data/official-routes.ts

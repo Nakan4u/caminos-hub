@@ -15,7 +15,7 @@ PostgreSQL 16 · Vitest
 
 - **Node 20.19+** — Prisma 7's CLI refuses to run below this. The repo pins Node 22
   in `.nvmrc`; run `nvm use` before anything else.
-- **Podman** (or Docker) for the local Postgres container.
+- **Docker** for the local Postgres container.
 
 ## Getting started
 
@@ -24,7 +24,7 @@ nvm use                  # Node 22, per .nvmrc
 npm install
 cp .env.example .env
 
-podman machine start     # first time, or after a reboot
+open -a Docker           # first time, or after a reboot; wait for Docker Desktop to finish starting
 npm run db:up            # start Postgres 16 on :5432
 
 npx prisma migrate dev   # create the schema
