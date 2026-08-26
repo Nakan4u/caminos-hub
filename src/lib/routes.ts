@@ -22,11 +22,6 @@ export async function getRoutesBySlugs(slugs: string[]) {
   return slugs.map((slug) => bySlug.get(slug)).filter((route) => route !== undefined)
 }
 
-export async function listRouteSlugs() {
-  const routes = await prisma.route.findMany({ select: { slug: true } })
-  return routes.map((route) => route.slug)
-}
-
 /** Every country any route passes through, for the filter bar. */
 export async function listCountries() {
   const routes = await prisma.route.findMany({ select: { countries: true } })

@@ -1,16 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getRouteBySlug, listRouteSlugs } from '@/lib/routes'
+import { getRouteBySlug } from '@/lib/routes'
 import { DIFFICULTY_BLURBS, DIFFICULTY_LABELS, formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'
 import { StageTable } from '@/components/StageTable'
 import styles from './route-detail.module.scss'
-
-export async function generateStaticParams() {
-  const slugs = await listRouteSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
 
 export async function generateMetadata({
   params,
