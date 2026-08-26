@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Link } from '@/i18n/navigation'
 import { getRouteBySlug } from '@/lib/routes'
 import { DIFFICULTY_BLURBS, DIFFICULTY_LABELS, formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'

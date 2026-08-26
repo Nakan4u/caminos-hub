@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getRoutesBySlugs } from '@/lib/routes'
 import type { SearchParams } from '@/lib/filters'
 import { formatPopularity } from '@/lib/format'

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { RouteSummary } from '@/lib/routes'
 import { DifficultyBadge } from './DifficultyBadge'
 import { CompareToggle } from './CompareToggle'
