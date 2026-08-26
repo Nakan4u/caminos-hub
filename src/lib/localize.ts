@@ -18,7 +18,8 @@ export type LocalizedRoute = Pick<
   >
 
 export type LocalizedStage = Pick<Stage, 'order' | 'distanceKm' | 'ascentM'> &
-  NonNullablePick<StageTranslation, 'fromPlace' | 'toPlace' | 'notes'>
+  NonNullablePick<StageTranslation, 'fromPlace' | 'toPlace'> &
+  Pick<StageTranslation, 'notes'>
 
 /**
  * Resolves one translatable field: the locale's own value, falling back to the English row's.
@@ -34,6 +35,20 @@ function resolveField<T extends { locale: string }, K extends keyof T>(
 ): NonNullable<T[K]> {
   const value = translations.find((t) => t.locale === locale)?.[field] ?? translations.find((t) => t.locale === 'en')![field]
   return value as NonNullable<T[K]>
+}
+
+/**
+ * Resolves one translatable field that is genuinely optional even on the English row (e.g.
+ * `StageTranslation.notes`, absent for most stages) — the locale's own value falls back to the
+ * English row's, but the result may still be `null` if neither has one.
+ */
+function resolveNullableField<T extends { locale: string }, K extends keyof T>(
+  translations: T[],
+  locale: string,
+  field: K,
+): T[K] {
+  const value = translations.find((t) => t.locale === locale)?.[field] ?? translations.find((t) => t.locale === 'en')?.[field]
+  return value as T[K]
 }
 
 /** Resolves a Route's translated fields for `locale`, falling back to English per-field, merged with its untranslated structural fields. */
@@ -67,6 +82,6 @@ export function localizeStage(stage: StageWithTranslations, locale: string): Loc
     ascentM,
     fromPlace: resolveField(translations, locale, 'fromPlace'),
     toPlace: resolveField(translations, locale, 'toPlace'),
-    notes: resolveField(translations, locale, 'notes'),
+    notes: resolveNullableField(translations, locale, 'notes'),
   }
 }
