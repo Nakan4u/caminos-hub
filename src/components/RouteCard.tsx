@@ -1,10 +1,15 @@
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { RouteSummary } from '@/lib/routes'
 import { DifficultyBadge } from './DifficultyBadge'
 import { CompareToggle } from './CompareToggle'
 import styles from './RouteCard.module.scss'
 
-export function RouteCard({ route }: { route: RouteSummary }) {
+export async function RouteCard({ route }: { route: RouteSummary }) {
+  const t = await getTranslations('RouteCard')
+  const tFormat = await getTranslations('Format')
+  const tCountries = await getTranslations('Countries')
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
@@ -14,7 +19,7 @@ export function RouteCard({ route }: { route: RouteSummary }) {
           </h2>
           <div className={styles.nameEn}>{route.name}</div>
         </div>
-        {route.isUnesco && <span className={styles.unesco}>UNESCO</span>}
+        {route.isUnesco && <span className={styles.unesco}>{t('unesco')}</span>}
       </div>
 
       <p className={styles.summary}>{route.summary}</p>
@@ -22,16 +27,18 @@ export function RouteCard({ route }: { route: RouteSummary }) {
       <div className={styles.stats}>
         <div className={styles.stat}>
           <span className={styles.statValue}>{route.totalKm}</span>
-          <span className={styles.statLabel}>km</span>
+          <span className={styles.statLabel}>{tFormat('kmUnit')}</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{route.typicalDays}</span>
-          <span className={styles.statLabel}>days</span>
+          <span className={styles.statLabel}>
+            {tFormat('daysUnit', { days: route.typicalDays })}
+          </span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{route.countries.length}</span>
           <span className={styles.statLabel}>
-            {route.countries.length === 1 ? 'country' : 'countries'}
+            {tCountries('count', { count: route.countries.length })}
           </span>
         </div>
       </div>

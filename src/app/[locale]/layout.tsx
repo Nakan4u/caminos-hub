@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.scss'
 import { routing } from '@/i18n/routing'
@@ -11,17 +11,24 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { ThemeBootstrap } from '@/components/ThemeBootstrap'
 import { THEME_COOKIE, parseTheme } from '@/lib/theme'
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Camino-Hub — the official Camino de Santiago routes',
-    template: '%s · Camino-Hub',
-  },
-  description:
-    'Browse, filter and compare the official Camino de Santiago routes: distance, days, difficulty and full stage lists.',
-}
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Layout' })
+  return {
+    title: {
+      default: t('metaTitle'),
+      template: '%s · Camino-Hub',
+    },
+    description: t('metaDescription'),
+  }
 }
 
 export default async function RootLayout({
@@ -34,6 +41,8 @@ export default async function RootLayout({
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
+
+  const t = await getTranslations('Layout')
 
   const cookieStore = await cookies()
   const storedTheme = parseTheme(cookieStore.get(THEME_COOKIE)?.value)
@@ -48,8 +57,8 @@ export default async function RootLayout({
                 Camino<span>·</span>Hub
               </Link>
               <nav className="site-header__nav d-flex align-items-center gap-4">
-                <Link href="/">All routes</Link>
-                <Link href="/compare">Compare</Link>
+                <Link href="/">{t('navAllRoutes')}</Link>
+                <Link href="/compare">{t('navCompare')}</Link>
                 <ThemeToggle />
               </nav>
             </div>
@@ -59,15 +68,8 @@ export default async function RootLayout({
 
           <footer className="site-footer mt-5">
             <div className="container py-4">
-              <p className="mb-1">
-                Camino-Hub lists the officially recognised routes of the Camino de
-                Santiago.
-              </p>
-              <p className="mb-0">
-                Distances and stage divisions follow common guidebook conventions and are
-                approximate. Always carry a current guide and check conditions locally
-                before setting out.
-              </p>
+              <p className="mb-1">{t('footerLine1')}</p>
+              <p className="mb-0">{t('footerLine2')}</p>
             </div>
           </footer>
 

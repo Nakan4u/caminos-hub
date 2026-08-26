@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { parseFilters, type SearchParams } from '@/lib/filters'
 import { listCountries, listRoutes } from '@/lib/routes'
 import { FilterBar } from '@/components/FilterBar'
@@ -10,19 +11,16 @@ export default async function CatalogPage({
 }: {
   searchParams: Promise<SearchParams>
 }) {
+  const t = await getTranslations('Catalog')
   const filters = parseFilters(await searchParams)
   const [routes, countries] = await Promise.all([listRoutes(filters), listCountries()])
 
   return (
     <>
       <header className="mb-4">
-        <p className="eyebrow mb-2">The official routes</p>
-        <h1 className="page-title">Every official Camino de Santiago</h1>
-        <p className="page-lede">
-          Fifteen recognised routes, from a five-day walk out of Ferrol to a
-          seven-hundred-kilometre crossing from Seville. Filter by what you actually
-          have — distance, time, and how hard you want it to be.
-        </p>
+        <p className="eyebrow mb-2">{t('eyebrow')}</p>
+        <h1 className="page-title">{t('title')}</h1>
+        <p className="page-lede">{t('lede')}</p>
       </header>
 
       <CompareProvider>
@@ -30,11 +28,8 @@ export default async function CatalogPage({
 
         {routes.length === 0 ? (
           <div className="text-center py-5">
-            <h2 className="h5">No routes match those filters</h2>
-            <p className="text-secondary mb-0">
-              Try allowing more distance or more days, or clear the filters to see all
-              fifteen.
-            </p>
+            <h2 className="h5">{t('emptyTitle')}</h2>
+            <p className="text-secondary mb-0">{t('emptyLede')}</p>
           </div>
         ) : (
           <div className="row g-3 g-md-4">

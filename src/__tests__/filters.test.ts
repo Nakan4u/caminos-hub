@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_SORT,
-  SORT_OPTIONS,
+  SORT_VALUES,
   filtersToQueryString,
   parseFilters,
 } from '@/lib/filters'
@@ -51,8 +51,8 @@ describe('parseFilters', () => {
 
   it('falls back to the default sort for an unknown sort key', () => {
     expect(parseFilters({ sort: 'nonsense' }).sort).toBe(DEFAULT_SORT)
-    for (const option of SORT_OPTIONS) {
-      expect(parseFilters({ sort: option.value }).sort).toBe(option.value)
+    for (const value of SORT_VALUES) {
+      expect(parseFilters({ sort: value }).sort).toBe(value)
     }
   })
 })

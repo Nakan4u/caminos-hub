@@ -1,22 +1,12 @@
-import type { Difficulty } from '@/lib/filters'
+/** Shared call signature of `useTranslations`/`getTranslations` for a given namespace. */
+type Translator = (key: string, values?: Record<string, string | number>) => string
 
-export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
-  EASY: 'Easy',
-  MODERATE: 'Moderate',
-  HARD: 'Hard',
+export function formatKm(km: number, t: Translator): string {
+  const value = Number.isInteger(km) ? km : km.toFixed(1)
+  return t('km', { km: value })
 }
 
-export const DIFFICULTY_BLURBS: Record<Difficulty, string> = {
-  EASY: 'Gentle terrain and short stages, with services throughout.',
-  MODERATE: 'Sustained walking with real climbs, but nothing technical.',
-  HARD: 'Long days, big ascent or long gaps between services.',
-}
-
-export function formatKm(km: number): string {
-  return `${Number.isInteger(km) ? km : km.toFixed(1)} km`
-}
-
-export function formatPopularity(pilgrims: number): string {
-  if (pilgrims >= 1000) return `~${Math.round(pilgrims / 1000)}k a year`
-  return `~${pilgrims} a year`
+export function formatPopularity(pilgrims: number, t: Translator): string {
+  if (pilgrims >= 1000) return t('popularityThousands', { count: Math.round(pilgrims / 1000) })
+  return t('popularityUnits', { count: pilgrims })
 }

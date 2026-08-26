@@ -1,1 +1,142 @@
-{}
+{
+  "Layout": {
+    "metaTitle": "Camino-Hub — the official Camino de Santiago routes",
+    "metaDescription": "Browse, filter and compare the official Camino de Santiago routes: distance, days, difficulty and full stage lists.",
+    "navAllRoutes": "All routes",
+    "navCompare": "Compare",
+    "footerLine1": "Camino-Hub lists the officially recognised routes of the Camino de Santiago.",
+    "footerLine2": "Distances and stage divisions follow common guidebook conventions and are approximate. Always carry a current guide and check conditions locally before setting out."
+  },
+  "NotFound": {
+    "eyebrow": "Off the waymarked path",
+    "title": "We could not find that route",
+    "lede": "The page you asked for does not exist. The fifteen official routes are all listed in the catalog.",
+    "backLink": "Browse all routes"
+  },
+  "Catalog": {
+    "eyebrow": "The official routes",
+    "title": "Every official Camino de Santiago",
+    "lede": "Fifteen recognised routes, from a five-day walk out of Ferrol to a seven-hundred-kilometre crossing from Seville. Filter by what you actually have — distance, time, and how hard you want it to be.",
+    "emptyTitle": "No routes match those filters",
+    "emptyLede": "Try allowing more distance or more days, or clear the filters to see all fifteen."
+  },
+  "RouteDetail": {
+    "notFoundTitle": "Route not found",
+    "backLink": "← All routes",
+    "unesco": "UNESCO World Heritage",
+    "factTotalDistance": "Total distance",
+    "factTypicalDuration": "Typical duration",
+    "factStages": "Stages",
+    "factAverageStage": "Average stage",
+    "factLongestStage": "Longest stage",
+    "factPilgrims": "Pilgrims",
+    "beforeYouGo": "Before you go",
+    "difficulty": "Difficulty",
+    "waymarking": "Waymarking",
+    "bestSeason": "Best season",
+    "stagesHeading": "Stages",
+    "stagesIntro": "The conventional stage division. Distances over 30 km are highlighted — those are the days worth planning around."
+  },
+  "Compare": {
+    "metaTitle": "Compare routes",
+    "metaDescription": "Put the official Camino routes side by side.",
+    "title": "Compare routes",
+    "emptyLede": "Nothing selected yet. Tick <em>Compare</em> on two or more routes in the catalog and they will line up here.",
+    "backLink": "Browse all routes",
+    "eyebrow": "Side by side",
+    "comparingTitle": "{count, plural, one {Comparing # route} other {Comparing # routes}}",
+    "onlyOneLede": "Only one route selected — go back and tick another to see a real comparison.",
+    "attribute": "Attribute",
+    "rowDistance": "Distance",
+    "rowTypicalDays": "Typical days",
+    "rowDifficulty": "Difficulty",
+    "rowStarts": "Starts",
+    "rowFinishes": "Finishes",
+    "rowCountries": "Countries",
+    "rowAverageDay": "Average day",
+    "rowPilgrims": "Pilgrims",
+    "rowBestSeason": "Best season",
+    "rowWaymarking": "Waymarking",
+    "rowUnesco": "UNESCO listed",
+    "yes": "Yes",
+    "no": "No",
+    "backToAllRoutes": "← Back to all routes"
+  },
+  "FilterBar": {
+    "ariaLabel": "Filter routes",
+    "search": "Search",
+    "searchPlaceholder": "Name, start or finish",
+    "maxDistance": "Max distance",
+    "anyDistance": "Any distance",
+    "under150": "Under 150 km",
+    "under300": "Under 300 km",
+    "under500": "Under 500 km",
+    "under800": "Under 800 km",
+    "timeAvailable": "Time available",
+    "anyLength": "Any length",
+    "upToWeek": "Up to a week",
+    "upToTwoWeeks": "Up to two weeks",
+    "upToThreeWeeks": "Up to three weeks",
+    "upToFiveWeeks": "Up to five weeks",
+    "sortBy": "Sort by",
+    "difficulty": "Difficulty",
+    "country": "Country",
+    "resultCount": "{count, plural, one {<strong>#</strong> route} other {<strong>#</strong> routes}}",
+    "clearFilters": "Clear filters"
+  },
+  "CompareBar": {
+    "selectedCount": "{count} of {max} selected",
+    "hintPickMore": "Pick at least one more to compare.",
+    "hintFull": "That is the maximum.",
+    "hintMore": "Add more, or compare now.",
+    "clear": "Clear",
+    "compare": "Compare"
+  },
+  "Difficulty": {
+    "EASY": {
+      "label": "Easy",
+      "blurb": "Gentle terrain and short stages, with services throughout."
+    },
+    "MODERATE": {
+      "label": "Moderate",
+      "blurb": "Sustained walking with real climbs, but nothing technical."
+    },
+    "HARD": {
+      "label": "Hard",
+      "blurb": "Long days, big ascent or long gaps between services."
+    }
+  },
+  "Sort": {
+    "popularity": "Most walked",
+    "distance-asc": "Shortest first",
+    "distance-desc": "Longest first",
+    "days-asc": "Fewest days",
+    "name": "Name (A–Z)"
+  },
+  "Countries": {
+    "count": "{count, plural, one {country} other {countries}}"
+  },
+  "Format": {
+    "km": "{km} km",
+    "kmUnit": "km",
+    "days": "{days, plural, one {# day} other {# days}}",
+    "daysUnit": "{days, plural, one {day} other {days}}",
+    "meters": "{m} m",
+    "popularityThousands": "~{count}k a year",
+    "popularityUnits": "~{count} a year"
+  },
+  "RouteCard": {
+    "unesco": "UNESCO"
+  },
+  "StageTable": {
+    "stageNumber": "#",
+    "stage": "Stage",
+    "distance": "Distance",
+    "total": "Total",
+    "ascent": "Ascent",
+    "notes": "Notes"
+  },
+  "ThemeToggle": {
+    "ariaLabel": "Toggle light/dark theme"
+  }
+}

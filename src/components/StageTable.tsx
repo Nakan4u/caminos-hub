@@ -1,9 +1,13 @@
+import { getTranslations } from 'next-intl/server'
 import type { RouteWithStages } from '@/lib/routes'
 import styles from './StageTable.module.scss'
 
 const LONG_STAGE_KM = 30
 
-export function StageTable({ stages }: { stages: RouteWithStages['stages'] }) {
+export async function StageTable({ stages }: { stages: RouteWithStages['stages'] }) {
+  const t = await getTranslations('StageTable')
+  const tFormat = await getTranslations('Format')
+
   type Row = { stage: RouteWithStages['stages'][number]; cumulative: number }
   const rows = stages.reduce<Row[]>((acc, stage) => {
     const cumulative = (acc.at(-1)?.cumulative ?? 0) + stage.distanceKm
@@ -16,18 +20,18 @@ export function StageTable({ stages }: { stages: RouteWithStages['stages'] }) {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Stage</th>
+            <th scope="col">{t('stageNumber')}</th>
+            <th scope="col">{t('stage')}</th>
             <th scope="col" className={styles.numeric}>
-              Distance
+              {t('distance')}
             </th>
             <th scope="col" className={styles.numeric}>
-              Total
+              {t('total')}
             </th>
             <th scope="col" className={styles.numeric}>
-              Ascent
+              {t('ascent')}
             </th>
-            <th scope="col">Notes</th>
+            <th scope="col">{t('notes')}</th>
           </tr>
         </thead>
         <tbody>
@@ -42,13 +46,13 @@ export function StageTable({ stages }: { stages: RouteWithStages['stages'] }) {
                   {stage.toPlace}
                 </td>
                 <td className={`${styles.numeric} ${isLong ? styles.long : ''}`}>
-                  {stage.distanceKm.toFixed(1)} km
+                  {tFormat('km', { km: stage.distanceKm.toFixed(1) })}
                 </td>
                 <td className={`${styles.numeric} ${styles.cumulative}`}>
                   {cumulative.toFixed(1)}
                 </td>
                 <td className={`${styles.numeric} ${styles.cumulative}`}>
-                  {stage.ascentM ? `${stage.ascentM} m` : '—'}
+                  {stage.ascentM ? tFormat('meters', { m: stage.ascentM }) : '—'}
                 </td>
                 <td className={styles.notes}>{stage.notes ?? ''}</td>
               </tr>

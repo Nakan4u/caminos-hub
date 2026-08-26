@@ -1,14 +1,20 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getRoutesBySlugs } from '@/lib/routes'
 import type { SearchParams } from '@/lib/filters'
-import { formatPopularity } from '@/lib/format'
+import { formatKm, formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'
 import styles from './compare.module.scss'
 
-export const metadata: Metadata = {
-  title: 'Compare routes',
-  description: 'Put the official Camino routes side by side.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Compare' })
+  return { title: t('metaTitle'), description: t('metaDescription') }
 }
 
 const MAX_COMPARE = 4
@@ -18,6 +24,9 @@ export default async function ComparePage({
 }: {
   searchParams: Promise<SearchParams>
 }) {
+  const t = await getTranslations('Compare')
+  const tFormat = await getTranslations('Format')
+
   const raw = (await searchParams).routes
   const slugs = [
     ...new Set(
@@ -33,53 +42,47 @@ export default async function ComparePage({
   if (routes.length === 0) {
     return (
       <>
-        <h1 className="page-title">Compare routes</h1>
-        <p className="page-lede">
-          Nothing selected yet. Tick <em>Compare</em> on two or more routes in the
-          catalog and they will line up here.
-        </p>
+        <h1 className="page-title">{t('title')}</h1>
+        <p className="page-lede">{t.rich('emptyLede', { em: (chunks) => <em>{chunks}</em> })}</p>
         <Link href="/" className="btn btn-arrow mt-2">
-          Browse all routes
+          {t('backLink')}
         </Link>
       </>
     )
   }
 
   const rows: { label: string; render: (route: (typeof routes)[number]) => React.ReactNode }[] = [
-    { label: 'Distance', render: (route) => `${route.totalKm} km` },
-    { label: 'Typical days', render: (route) => `${route.typicalDays} days` },
+    { label: t('rowDistance'), render: (route) => formatKm(route.totalKm, tFormat) },
     {
-      label: 'Difficulty',
+      label: t('rowTypicalDays'),
+      render: (route) => tFormat('days', { days: route.typicalDays }),
+    },
+    {
+      label: t('rowDifficulty'),
       render: (route) => <DifficultyBadge difficulty={route.difficulty} />,
     },
-    { label: 'Starts', render: (route) => route.startPlace },
-    { label: 'Finishes', render: (route) => route.endPlace },
-    { label: 'Countries', render: (route) => route.countries.join(', ') },
+    { label: t('rowStarts'), render: (route) => route.startPlace },
+    { label: t('rowFinishes'), render: (route) => route.endPlace },
+    { label: t('rowCountries'), render: (route) => route.countries.join(', ') },
     {
-      label: 'Average day',
-      render: (route) => `${(route.totalKm / route.typicalDays).toFixed(1)} km`,
+      label: t('rowAverageDay'),
+      render: (route) => formatKm(route.totalKm / route.typicalDays, tFormat),
     },
-    { label: 'Pilgrims', render: (route) => formatPopularity(route.popularity) },
-    { label: 'Best season', render: (route) => route.bestSeason },
-    { label: 'Waymarking', render: (route) => route.waymarking },
+    { label: t('rowPilgrims'), render: (route) => formatPopularity(route.popularity, tFormat) },
+    { label: t('rowBestSeason'), render: (route) => route.bestSeason },
+    { label: t('rowWaymarking'), render: (route) => route.waymarking },
     {
-      label: 'UNESCO listed',
-      render: (route) => (route.isUnesco ? 'Yes' : 'No'),
+      label: t('rowUnesco'),
+      render: (route) => (route.isUnesco ? t('yes') : t('no')),
     },
   ]
 
   return (
     <>
       <header className="mb-4">
-        <p className="eyebrow mb-2">Side by side</p>
-        <h1 className="page-title">
-          Comparing {routes.length} {routes.length === 1 ? 'route' : 'routes'}
-        </h1>
-        {routes.length === 1 && (
-          <p className="page-lede">
-            Only one route selected — go back and tick another to see a real comparison.
-          </p>
-        )}
+        <p className="eyebrow mb-2">{t('eyebrow')}</p>
+        <h1 className="page-title">{t('comparingTitle', { count: routes.length })}</h1>
+        {routes.length === 1 && <p className="page-lede">{t('onlyOneLede')}</p>}
       </header>
 
       <div className={styles.wrapper}>
@@ -87,7 +90,7 @@ export default async function ComparePage({
           <thead>
             <tr>
               <th scope="col" className={styles.rowLabel}>
-                <span className="visually-hidden">Attribute</span>
+                <span className="visually-hidden">{t('attribute')}</span>
               </th>
               {routes.map((route) => (
                 <th key={route.slug} scope="col" className={styles.routeHead}>
@@ -115,7 +118,7 @@ export default async function ComparePage({
       </div>
 
       <Link href="/" className="btn btn-outline-secondary mt-4">
-        ← Back to all routes
+        {t('backToAllRoutes')}
       </Link>
     </>
   )

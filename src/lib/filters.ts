@@ -1,15 +1,15 @@
 export const DIFFICULTIES = ['EASY', 'MODERATE', 'HARD'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
 
-export const SORT_OPTIONS = [
-  { value: 'popularity', label: 'Most walked' },
-  { value: 'distance-asc', label: 'Shortest first' },
-  { value: 'distance-desc', label: 'Longest first' },
-  { value: 'days-asc', label: 'Fewest days' },
-  { value: 'name', label: 'Name (A–Z)' },
+export const SORT_VALUES = [
+  'popularity',
+  'distance-asc',
+  'distance-desc',
+  'days-asc',
+  'name',
 ] as const
 
-export type SortKey = (typeof SORT_OPTIONS)[number]['value']
+export type SortKey = (typeof SORT_VALUES)[number]
 export const DEFAULT_SORT: SortKey = 'popularity'
 
 export type SearchParams = Record<string, string | string[] | undefined>
@@ -42,7 +42,7 @@ function isDifficulty(value: string): value is Difficulty {
 }
 
 function isSortKey(value: string): value is SortKey {
-  return SORT_OPTIONS.some((option) => option.value === value)
+  return (SORT_VALUES as readonly string[]).includes(value)
 }
 
 export function parseFilters(searchParams: SearchParams): RouteFilters {

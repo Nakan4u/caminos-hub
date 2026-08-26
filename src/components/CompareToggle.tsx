@@ -1,8 +1,10 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useCompare } from './CompareProvider'
 
 export function CompareToggle({ slug }: { slug: string }) {
+  const t = useTranslations('CompareBar')
   const { isSelected, toggle, isFull } = useCompare()
   const checked = isSelected(slug)
   const inputId = `compare-${slug}`
@@ -18,7 +20,7 @@ export function CompareToggle({ slug }: { slug: string }) {
         onChange={() => toggle(slug)}
       />
       <label className="form-check-label small text-secondary" htmlFor={inputId}>
-        Compare
+        {t('compare')}
       </label>
     </div>
   )

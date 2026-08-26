@@ -1,18 +1,18 @@
 'use client'
 
 import { useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import {
   DIFFICULTIES,
   DEFAULT_SORT,
-  SORT_OPTIONS,
+  SORT_VALUES,
   filtersToQueryString,
   hasActiveFilters,
   type Difficulty,
   type RouteFilters,
   type SortKey,
 } from '@/lib/filters'
-import { DIFFICULTY_LABELS } from '@/lib/format'
 import styles from './FilterBar.module.scss'
 
 interface Props {
@@ -22,6 +22,9 @@ interface Props {
 }
 
 export function FilterBar({ filters, countries, resultCount }: Props) {
+  const t = useTranslations('FilterBar')
+  const tDifficulty = useTranslations('Difficulty')
+  const tSort = useTranslations('Sort')
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
@@ -46,7 +49,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
   }
 
   return (
-    <section className={styles.bar} aria-label="Filter routes">
+    <section className={styles.bar} aria-label={t('ariaLabel')}>
       <form
         onSubmit={(event) => {
           event.preventDefault()
@@ -57,7 +60,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
         <div className={styles.grid}>
           <div>
             <label className={styles.label} htmlFor="filter-q">
-              Search
+              {t('search')}
             </label>
             <input
               key={filters.q ?? ''}
@@ -65,7 +68,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
               name="q"
               className="form-control"
               type="search"
-              placeholder="Name, start or finish"
+              placeholder={t('searchPlaceholder')}
               defaultValue={filters.q ?? ''}
               onBlur={(event) =>
                 apply({ ...filters, q: event.target.value.trim() || undefined })
@@ -75,7 +78,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
 
           <div>
             <label className={styles.label} htmlFor="filter-max-km">
-              Max distance
+              {t('maxDistance')}
             </label>
             <select
               id="filter-max-km"
@@ -88,17 +91,17 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
                 })
               }
             >
-              <option value="">Any distance</option>
-              <option value="150">Under 150 km</option>
-              <option value="300">Under 300 km</option>
-              <option value="500">Under 500 km</option>
-              <option value="800">Under 800 km</option>
+              <option value="">{t('anyDistance')}</option>
+              <option value="150">{t('under150')}</option>
+              <option value="300">{t('under300')}</option>
+              <option value="500">{t('under500')}</option>
+              <option value="800">{t('under800')}</option>
             </select>
           </div>
 
           <div>
             <label className={styles.label} htmlFor="filter-max-days">
-              Time available
+              {t('timeAvailable')}
             </label>
             <select
               id="filter-max-days"
@@ -111,17 +114,17 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
                 })
               }
             >
-              <option value="">Any length</option>
-              <option value="7">Up to a week</option>
-              <option value="14">Up to two weeks</option>
-              <option value="21">Up to three weeks</option>
-              <option value="35">Up to five weeks</option>
+              <option value="">{t('anyLength')}</option>
+              <option value="7">{t('upToWeek')}</option>
+              <option value="14">{t('upToTwoWeeks')}</option>
+              <option value="21">{t('upToThreeWeeks')}</option>
+              <option value="35">{t('upToFiveWeeks')}</option>
             </select>
           </div>
 
           <div>
             <label className={styles.label} htmlFor="filter-sort">
-              Sort by
+              {t('sortBy')}
             </label>
             <select
               id="filter-sort"
@@ -131,9 +134,9 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
                 apply({ ...filters, sort: event.target.value as SortKey })
               }
             >
-              {SORT_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {SORT_VALUES.map((value) => (
+                <option key={value} value={value}>
+                  {tSort(value)}
                 </option>
               ))}
             </select>
@@ -142,7 +145,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
 
         <div className="d-flex flex-wrap gap-4 mt-3">
           <div>
-            <span className={styles.label}>Difficulty</span>
+            <span className={styles.label}>{t('difficulty')}</span>
             <div className={styles.chips}>
               {DIFFICULTIES.map((difficulty: Difficulty) => {
                 const active = filters.difficulty?.includes(difficulty) ?? false
@@ -161,7 +164,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
                       )
                     }
                   >
-                    {DIFFICULTY_LABELS[difficulty]}
+                    {tDifficulty(`${difficulty}.label`)}
                   </button>
                 )
               })}
@@ -169,7 +172,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
           </div>
 
           <div>
-            <span className={styles.label}>Country</span>
+            <span className={styles.label}>{t('country')}</span>
             <div className={styles.chips}>
               {countries.map((country) => {
                 const active = filters.countries?.includes(country) ?? false
@@ -198,7 +201,10 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
 
         <div className={styles.footer}>
           <p className={`${styles.count} mb-0 ${isPending ? styles.pending : ''}`}>
-            <strong>{resultCount}</strong> {resultCount === 1 ? 'route' : 'routes'}
+            {t.rich('resultCount', {
+              count: resultCount,
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
           {hasActiveFilters(filters) && (
             <button
@@ -206,7 +212,7 @@ export function FilterBar({ filters, countries, resultCount }: Props) {
               className="btn btn-sm btn-outline-secondary"
               onClick={() => apply({ sort: filters.sort ?? DEFAULT_SORT })}
             >
-              Clear filters
+              {t('clearFilters')}
             </button>
           )}
         </div>

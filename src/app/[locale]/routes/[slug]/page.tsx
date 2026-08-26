@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getRouteBySlug } from '@/lib/routes'
-import { DIFFICULTY_BLURBS, DIFFICULTY_LABELS, formatPopularity } from '@/lib/format'
+import { formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'
 import { StageTable } from '@/components/StageTable'
 import styles from './route-detail.module.scss'
@@ -10,20 +11,29 @@ import styles from './route-detail.module.scss'
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
-  const route = await getRouteBySlug((await params).slug)
-  if (!route) return { title: 'Route not found' }
+  const { locale, slug } = await params
+  const route = await getRouteBySlug(slug)
+  if (!route) {
+    const t = await getTranslations({ locale, namespace: 'RouteDetail' })
+    return { title: t('notFoundTitle') }
+  }
   return { title: route.nameEs, description: route.summary }
 }
 
 export default async function RouteDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
 }) {
-  const route = await getRouteBySlug((await params).slug)
+  const { slug } = await params
+  const route = await getRouteBySlug(slug)
   if (!route) notFound()
+
+  const t = await getTranslations('RouteDetail')
+  const tFormat = await getTranslations('Format')
+  const tDifficulty = await getTranslations('Difficulty')
 
   const longestStage = route.stages.reduce((longest, stage) =>
     stage.distanceKm > longest.distanceKm ? stage : longest,
@@ -31,25 +41,34 @@ export default async function RouteDetailPage({
   const averageKm = route.totalKm / route.stages.length
 
   const facts = [
-    { label: 'Total distance', value: `${route.totalKm} km` },
-    { label: 'Typical duration', value: `${route.typicalDays} days` },
-    { label: 'Stages', value: String(route.stages.length) },
-    { label: 'Average stage', value: `${averageKm.toFixed(1)} km` },
-    { label: 'Longest stage', value: `${longestStage.distanceKm.toFixed(1)} km` },
-    { label: 'Pilgrims', value: formatPopularity(route.popularity) },
+    { label: t('factTotalDistance'), value: tFormat('km', { km: route.totalKm }) },
+    {
+      label: t('factTypicalDuration'),
+      value: tFormat('days', { days: route.typicalDays }),
+    },
+    { label: t('factStages'), value: String(route.stages.length) },
+    {
+      label: t('factAverageStage'),
+      value: tFormat('km', { km: averageKm.toFixed(1) }),
+    },
+    {
+      label: t('factLongestStage'),
+      value: tFormat('km', { km: longestStage.distanceKm.toFixed(1) }),
+    },
+    { label: t('factPilgrims'), value: formatPopularity(route.popularity, tFormat) },
   ]
 
   return (
     <article>
       <Link href="/" className={styles.back}>
-        ← All routes
+        {t('backLink')}
       </Link>
 
       <header className={styles.header}>
         <div>
           <p className="eyebrow mb-2">
             {route.countries.join(' · ')}
-            {route.isUnesco && ' · UNESCO World Heritage'}
+            {route.isUnesco && ` · ${t('unesco')}`}
           </p>
           <h1 className="page-title mb-1">{route.nameEs}</h1>
           <p className={styles.nameEn}>{route.name}</p>
@@ -79,16 +98,16 @@ export default async function RouteDetailPage({
         </div>
         <div className="col-12 col-lg-4">
           <aside className={styles.aside}>
-            <h2 className={styles.asideHeading}>Before you go</h2>
+            <h2 className={styles.asideHeading}>{t('beforeYouGo')}</h2>
             <dl className="mb-0">
-              <dt className={styles.asideLabel}>Difficulty</dt>
+              <dt className={styles.asideLabel}>{t('difficulty')}</dt>
               <dd className={styles.asideValue}>
-                {DIFFICULTY_LABELS[route.difficulty]} —{' '}
-                {DIFFICULTY_BLURBS[route.difficulty]}
+                {tDifficulty(`${route.difficulty}.label`)} —{' '}
+                {tDifficulty(`${route.difficulty}.blurb`)}
               </dd>
-              <dt className={styles.asideLabel}>Waymarking</dt>
+              <dt className={styles.asideLabel}>{t('waymarking')}</dt>
               <dd className={styles.asideValue}>{route.waymarking}</dd>
-              <dt className={styles.asideLabel}>Best season</dt>
+              <dt className={styles.asideLabel}>{t('bestSeason')}</dt>
               <dd className={`${styles.asideValue} mb-0`}>{route.bestSeason}</dd>
             </dl>
           </aside>
@@ -96,11 +115,8 @@ export default async function RouteDetailPage({
       </div>
 
       <section className="mt-5">
-        <h2 className={styles.sectionHeading}>Stages</h2>
-        <p className="text-secondary small mb-3">
-          The conventional stage division. Distances over 30 km are highlighted — those
-          are the days worth planning around.
-        </p>
+        <h2 className={styles.sectionHeading}>{t('stagesHeading')}</h2>
+        <p className="text-secondary small mb-3">{t('stagesIntro')}</p>
         <StageTable stages={route.stages} />
       </section>
     </article>

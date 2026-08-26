@@ -1,10 +1,12 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MAX_COMPARE, useCompare } from './CompareProvider'
 import styles from './CompareBar.module.scss'
 
 export function CompareBar() {
+  const t = useTranslations('CompareBar')
   const { selected, clear, isFull } = useCompare()
   if (selected.length === 0) return null
 
@@ -13,25 +15,25 @@ export function CompareBar() {
   return (
     <div className={styles.bar}>
       <span className={styles.count}>
-        {selected.length} of {MAX_COMPARE} selected
+        {t('selectedCount', { count: selected.length, max: MAX_COMPARE })}
       </span>
       <span className={styles.hint}>
         {selected.length < 2
-          ? 'Pick at least one more to compare.'
+          ? t('hintPickMore')
           : isFull
-            ? 'That is the maximum.'
-            : 'Add more, or compare now.'}
+            ? t('hintFull')
+            : t('hintMore')}
       </span>
       <span className={styles.spacer} />
       <button type="button" className="btn btn-sm btn-outline-light" onClick={clear}>
-        Clear
+        {t('clear')}
       </button>
       <Link
         href={href}
         className={`btn btn-sm btn-arrow ${selected.length < 2 ? 'disabled' : ''}`}
         aria-disabled={selected.length < 2}
       >
-        Compare
+        {t('compare')}
       </Link>
     </div>
   )
