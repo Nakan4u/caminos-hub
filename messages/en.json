@@ -143,5 +143,8 @@
   },
   "ThemeToggle": {
     "ariaLabel": "Toggle light/dark theme"
+  },
+  "LocaleSwitcher": {
+    "ariaLabel": "Language"
   }
 }

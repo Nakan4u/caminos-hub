@@ -1,0 +1,36 @@
+@use '../styles/tokens' as *;
+
+.switcher {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.separator {
+  margin: 0 0.4rem;
+  color: var(--color-border);
+}
+
+.link,
+.active {
+  color: var(--color-text-mid);
+  text-decoration: none;
+}
+
+.link {
+  &:hover,
+  &:focus-visible {
+    color: $arrow;
+  }
+}
+
+.active {
+  color: $arrow;
+}

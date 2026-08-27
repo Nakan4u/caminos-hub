@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.scss'
 import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { ThemeBootstrap } from '@/components/ThemeBootstrap'
 import { THEME_COOKIE, parseTheme } from '@/lib/theme'
@@ -59,6 +60,7 @@ export default async function RootLayout({
               <nav className="site-header__nav d-flex align-items-center gap-4">
                 <Link href="/">{t('navAllRoutes')}</Link>
                 <Link href="/compare">{t('navCompare')}</Link>
+                <LocaleSwitcher />
                 <ThemeToggle />
               </nav>
             </div>
