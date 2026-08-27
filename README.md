@@ -80,6 +80,18 @@ Two deliberate choices:
   grid and utilities; component-specific styling is Sass Modules. That keeps pages as
   Server Components — only `FilterBar` and the compare selection are client-side.
 
+## Migrate DB to prod
+
+```bash
+nvm use
+
+# 1. Make sure the prod schema is current. Use `deploy`, NOT `migrate dev`, in prod:
+DATABASE_URL="<prod-connection-string>" npx prisma migrate deploy
+
+# 2. Re-seed from official-routes.ts:
+DATABASE_URL="<prod-connection-string>" npx prisma db seed
+```
+
 ## Testing
 
 ```bash
