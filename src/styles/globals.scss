@@ -45,6 +45,14 @@ body {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
+// Bootstrap's ::placeholder colour derives from --bs-body-color-rgb, which we
+// don't remap per theme, so in dark mode it stays near-black and unreadable.
+// Pin it to the theme-aware soft-text token instead.
+.form-control::placeholder {
+  color: var(--color-text-soft);
+  opacity: 1;
+}
+
 h1,
 h2,
 h3,

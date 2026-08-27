@@ -1,36 +1,36 @@
 @use '../styles/tokens' as *;
 
-.switcher {
-  display: inline-flex;
-  align-items: center;
+.select {
+  appearance: none;
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  background-color: var(--color-surface);
+  color: var(--color-text-mid);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-}
+  padding: 0.3rem 1.8rem 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
 
-.item {
-  display: inline-flex;
-  align-items: center;
-}
+  // Chevron drawn inline so it inherits the theme without an asset request.
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%23838d92' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
 
-.separator {
-  margin: 0 0.4rem;
-  color: var(--color-border);
-}
-
-.link,
-.active {
-  color: var(--color-text-mid);
-  text-decoration: none;
-}
-
-.link {
   &:hover,
   &:focus-visible {
-    color: $arrow;
+    border-color: $arrow;
+    color: var(--color-text);
   }
-}
 
-.active {
-  color: $arrow;
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  option {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+  }
 }
