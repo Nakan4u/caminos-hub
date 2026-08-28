@@ -1,8 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getCurrentUser } from '@/lib/auth-dal'
-import { Avatar } from './Avatar'
-import { LogoutButton } from './LogoutButton'
+import { UserMenu } from './UserMenu'
 import styles from './AuthMenu.module.scss'
 
 /** Header chrome. Kept out of `layout.tsx`'s blocking path — render inside a
@@ -16,16 +15,18 @@ export async function AuthMenu({ locale }: { locale: string }) {
   }
 
   return (
-    <div className={styles.menu}>
-      <Link href="/my-routes">{t('navMyRoutes')}</Link>
-      <Link href="/settings" className={styles.avatarLink} aria-label={t('navSettings')}>
-        <Avatar src={user.image} name={user.name} email={user.email} />
-      </Link>
-      <span className={styles.greeting}>
-        {t('menuGreeting', { name: user.name ?? user.email })}
-      </span>
-      <LogoutButton locale={locale} />
-    </div>
+    <UserMenu
+      locale={locale}
+      name={user.name}
+      email={user.email}
+      image={user.image}
+      labels={{
+        greeting: t('menuGreeting', { name: user.name ?? user.email }),
+        myRoutes: t('navMyRoutes'),
+        settings: t('navSettings'),
+        signOut: t('navSignOut'),
+      }}
+    />
   )
 }
 

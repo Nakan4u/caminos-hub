@@ -1,44 +1,4 @@
-@use '../styles/tokens' as *;
-
-.menu {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.avatarLink {
-  display: inline-flex;
-  border-radius: 50%;
-  line-height: 0;
-
-  &:hover {
-    opacity: 0.85;
-  }
-}
-
-.greeting {
-  font-size: 0.85rem;
-  color: var(--color-text-soft);
-  max-width: 14ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.signOut {
-  border: none;
-  background: transparent;
-  padding: 0;
-  font-size: 0.925rem;
-  color: var(--color-text-mid);
-  cursor: pointer;
-
-  &:hover {
-    color: $arrow;
-  }
-}
-
 .placeholder {
   display: inline-block;
-  width: 4rem;
+  width: 2rem;
 }
