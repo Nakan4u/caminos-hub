@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.scss'
 import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
+import { Logo } from '@/components/Logo'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { ThemeBootstrap } from '@/components/ThemeBootstrap'
@@ -55,7 +56,10 @@ export default async function RootLayout({
           <header className="site-header">
             <div className="container d-flex align-items-center justify-content-between py-3">
               <Link href="/" className="site-header__brand">
-                Camino<span>·</span>Hub
+                <Logo />
+                <span>
+                  Camino<span className="site-header__brand-dot">·</span>Hub
+                </span>
               </Link>
               <nav className="site-header__nav d-flex align-items-center gap-4">
                 <Link href="/">{t('navAllRoutes')}</Link>
