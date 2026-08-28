@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { requireUser } from '@/lib/auth-dal'
 import { listUserRoutes } from '@/lib/user-routes'
+import { Avatar } from '@/components/Avatar'
 import { RouteCard } from '@/components/RouteCard'
 import { CompareProvider } from '@/components/CompareProvider'
 import { CompareBar } from '@/components/CompareBar'
@@ -55,10 +56,18 @@ export default async function MyRoutesPage({
 
   return (
     <>
-      <header className="mb-4">
-        <p className="eyebrow mb-2">{t('eyebrow')}</p>
-        <h1 className="page-title">{t('title')}</h1>
-        <p className="page-lede">{t('lede')}</p>
+      <header className={styles.pageHeader}>
+        <Avatar
+          src={user.image}
+          name={user.name}
+          email={user.email}
+          size={56}
+        />
+        <div>
+          <p className="eyebrow mb-2">{t('eyebrow')}</p>
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-lede">{t('lede')}</p>
+        </div>
       </header>
 
       <CompareProvider>

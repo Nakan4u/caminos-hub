@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getCurrentUser } from '@/lib/auth-dal'
+import { Avatar } from './Avatar'
 import { LogoutButton } from './LogoutButton'
 import styles from './AuthMenu.module.scss'
 
@@ -17,6 +18,7 @@ export async function AuthMenu({ locale }: { locale: string }) {
   return (
     <div className={styles.menu}>
       <Link href="/my-routes">{t('navMyRoutes')}</Link>
+      <Avatar src={user.image} name={user.name} email={user.email} />
       <span className={styles.greeting}>
         {t('menuGreeting', { name: user.name ?? user.email })}
       </span>

@@ -1,5 +1,12 @@
 @use '../../../styles/tokens' as *;
 
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .section {
   margin-bottom: 2.5rem;
 }

@@ -3,7 +3,12 @@ import { cache } from 'react'
 import { auth } from '@/auth'
 import { redirect } from '@/i18n/navigation'
 
-export type CurrentUser = { id: string; email: string; name: string | null }
+export type CurrentUser = {
+  id: string
+  email: string
+  name: string | null
+  image: string | null
+}
 
 /**
  * The session read, deduped per render pass. Returns the JWT-backed user or null
@@ -14,7 +19,12 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   const session = await auth()
   const user = session?.user
   if (!user?.id || !user.email) return null
-  return { id: user.id, email: user.email, name: user.name ?? null }
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name ?? null,
+    image: user.image ?? null,
+  }
 })
 
 /** Same as `getCurrentUser` but redirects to the locale-prefixed login page when signed out. */
