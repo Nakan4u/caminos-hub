@@ -9,7 +9,7 @@ without opening a dozen tabs.
 ## Stack
 
 Next.js 16 (App Router) · TypeScript · Bootstrap 5 + Sass Modules · Prisma 7 ·
-PostgreSQL 16 · Vitest
+PostgreSQL 16 · Auth.js (NextAuth v5) · Vitest
 
 ## Requirements
 
@@ -23,6 +23,8 @@ PostgreSQL 16 · Vitest
 nvm use                  # Node 22, per .nvmrc
 npm install
 cp .env.example .env
+# then set AUTH_SECRET in .env:  openssl rand -base64 32
+# (Google sign-in also needs AUTH_GOOGLE_ID / AUTH_GOOGLE_SECRET — see below)
 
 open -a Docker           # first time, or after a reboot; wait for Docker Desktop to finish starting
 npm run db:up            # start Postgres 16 on :5432
@@ -32,6 +34,19 @@ npx prisma db seed       # load the 15 routes and 191 stages
 
 npm run dev              # http://localhost:3000
 ```
+
+### Google sign-in setup
+
+Email + password works with just `AUTH_SECRET`. For the "Continue with Google" button:
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials → Create credentials → OAuth client ID → Web application**.
+2. **Authorized JavaScript origins:** `http://localhost:3000` (and your production origin).
+3. **Authorized redirect URIs:** `http://localhost:3000/api/auth/callback/google` (and `https://<prod-domain>/api/auth/callback/google`).
+4. Copy the client ID and secret into `.env` as `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET`.
+5. While the OAuth consent screen is unverified, add your Google account under **Test users**.
+
+Accounts are keyed by email and not linked across methods: if you registered with a
+password, sign in with the password (not Google) on that address, and vice versa.
 
 If the container already exists from a previous session, use `npm run db:start`
 instead of `db:up`.
@@ -58,16 +73,25 @@ Vitest suite validates it without needing a database at all.
 ```
 src/
 ├── data/official-routes.ts   Seed source of truth (15 routes, 191 stages)
+├── auth.ts                   Auth.js (NextAuth v5) config: Credentials + Google
 ├── lib/
 │   ├── prisma.ts             PrismaClient singleton (dev-HMR safe)
 │   ├── filters.ts            searchParams <-> RouteFilters, pure
 │   ├── route-query.ts        RouteFilters -> Prisma where/orderBy, pure
-│   ├── routes.ts             The only module that touches the database
+│   ├── routes.ts             Route reads — touches the database
+│   ├── user-routes.ts        Per-user saved-route reads/writes — touches the database
+│   ├── auth-dal.ts           getCurrentUser / requireUser — the authz choke point
+│   ├── auth-validation.ts    Credentials-form input validation, pure
+│   ├── route-status.ts       PLANNED | COMPLETED guard, pure
+│   ├── actions/              'use server' actions (auth forms, saved-route toggles)
 │   └── format.ts             Display helpers
 ├── app/[locale]/
 │   ├── page.tsx              Catalog: filters + card grid
 │   ├── routes/[slug]/        Detail: stats, description, stage table
-│   └── compare/              Side-by-side table for up to 4 routes
+│   ├── compare/              Side-by-side table for up to 4 routes
+│   ├── login/ register/      Auth pages (email+password + Google)
+│   └── my-routes/            Protected dashboard: Planned / Walked lists
+├── app/api/auth/[...nextauth]/  Auth.js route handler (not locale-prefixed)
 └── components/               One .module.scss beside each component
 ```
 
@@ -130,10 +154,24 @@ The migration that introduced these translation tables
 run `npx prisma migrate dev` followed by `npx prisma db seed` to repopulate route
 and stage content afterward.
 
+The auth pages (`/en/login`, `/en/register`, `/en/my-routes`, …) are locale-prefixed
+like every other page. The Auth.js route handler at `/api/auth/*` is intentionally
+**not** — it's excluded from the locale proxy's matcher.
+
+## Accounts
+
+Sign up with email + password or Google, then mark any route **Want to walk** or
+**Walked** from its card, its detail page, or the `/my-routes` dashboard. A route
+sits on at most one list — marking it Walked moves it off the Planned list.
+
+Deliberately left out for now: email verification, password reset, and any
+transactional email (there's no mail provider). Sessions are JWT-cookie based
+(forced by the Credentials provider), so `AUTH_SECRET` must be stable across
+restarts and deploys.
+
 ## Not in this version
 
-Maps, accommodation data, and user accounts and saved itineraries. A route map is
-the intended next step: `Stage` would gain nullable `lat`/`lng`, populated by a
-one-off geocoding script and drawn with Leaflet over free OpenStreetMap tiles.
-Stage place names are already kept clean so that script will work without manual
-cleanup.
+Maps and accommodation data. A route map is the intended next step: `Stage` would
+gain nullable `lat`/`lng`, populated by a one-off geocoding script and drawn with
+Leaflet over free OpenStreetMap tiles. Stage place names are already kept clean so
+that script will work without manual cleanup.

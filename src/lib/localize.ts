@@ -3,6 +3,11 @@ import type { Route, RouteTranslation, Stage, StageTranslation } from '@/generat
 type RouteWithTranslations = Route & { translations: RouteTranslation[] }
 type StageWithTranslations = Stage & { translations: StageTranslation[] }
 
+/** Locale plus its English fallback, deduped — the only two translation rows `resolveField` needs. */
+export function localeAndFallback(locale: string): string[] {
+  return locale === 'en' ? ['en'] : [locale, 'en']
+}
+
 /** Every field of `T` picked by `K`, widened by dropping `null` — used for the translated
  *  fields below, which the schema types nullable for future partial translations but which
  *  are always populated on the `en` row that every route/stage falls back to. */

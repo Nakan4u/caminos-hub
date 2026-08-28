@@ -3,8 +3,11 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getRouteBySlug } from '@/lib/routes'
+import { getCurrentUser } from '@/lib/auth-dal'
+import { getUserRouteStatus } from '@/lib/user-routes'
 import { formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'
+import { RouteListControl } from '@/components/RouteListControl'
 import { StageTable } from '@/components/StageTable'
 import styles from './route-detail.module.scss'
 
@@ -30,6 +33,9 @@ export default async function RouteDetailPage({
   const { locale, slug } = await params
   const route = await getRouteBySlug(slug, locale)
   if (!route) notFound()
+
+  const user = await getCurrentUser()
+  const listStatus = user ? await getUserRouteStatus(user.id, slug) : null
 
   const t = await getTranslations('RouteDetail')
   const tFormat = await getTranslations('Format')
@@ -76,6 +82,15 @@ export default async function RouteDetailPage({
           <p className={styles.endpoints}>
             {route.startPlace} <span className={styles.arrow}>→</span> {route.endPlace}
           </p>
+          {(user || listStatus !== null) && (
+            <div className={styles.listControl}>
+              <RouteListControl
+                slug={route.slug}
+                status={listStatus}
+                isLoggedIn={!!user}
+              />
+            </div>
+          )}
         </div>
         <DifficultyBadge difficulty={route.difficulty} />
       </header>

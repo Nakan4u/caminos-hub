@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -11,6 +12,7 @@ import { Logo } from '@/components/Logo'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { ThemeBootstrap } from '@/components/ThemeBootstrap'
+import { AuthMenu, AuthMenuFallback } from '@/components/AuthMenu'
 import { THEME_COOKIE, parseTheme } from '@/lib/theme'
 
 export function generateStaticParams() {
@@ -64,6 +66,9 @@ export default async function RootLayout({
               <nav className="site-header__nav d-flex align-items-center gap-4">
                 <Link href="/">{t('navAllRoutes')}</Link>
                 <Link href="/compare">{t('navCompare')}</Link>
+                <Suspense fallback={<AuthMenuFallback />}>
+                  <AuthMenu locale={locale} />
+                </Suspense>
                 <LocaleSwitcher />
                 <ThemeToggle />
               </nav>

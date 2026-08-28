@@ -1,6 +1,9 @@
 import { getTranslations } from 'next-intl/server'
 import { parseFilters, type SearchParams } from '@/lib/filters'
 import { listCountries, listRoutes } from '@/lib/routes'
+import { getCurrentUser } from '@/lib/auth-dal'
+import { getUserRouteStatuses } from '@/lib/user-routes'
+import type { RouteListStatus } from '@/lib/route-status'
 import { FilterBar } from '@/components/FilterBar'
 import { RouteCard } from '@/components/RouteCard'
 import { CompareProvider } from '@/components/CompareProvider'
@@ -16,9 +19,13 @@ export default async function CatalogPage({
   const { locale } = await params
   const t = await getTranslations('Catalog')
   const filters = parseFilters(await searchParams)
-  const [routes, countries] = await Promise.all([
+  const user = await getCurrentUser()
+  const [routes, countries, statuses] = await Promise.all([
     listRoutes(filters, locale),
     listCountries(),
+    user
+      ? getUserRouteStatuses(user.id)
+      : Promise.resolve({} as Record<string, RouteListStatus>),
   ])
 
   return (
@@ -41,7 +48,11 @@ export default async function CatalogPage({
           <div className="row g-3 g-md-4">
             {routes.map((route) => (
               <div className="col-12 col-md-6 col-xl-4" key={route.slug}>
-                <RouteCard route={route} />
+                <RouteCard
+                  route={route}
+                  listStatus={statuses[route.slug] ?? null}
+                  isLoggedIn={!!user}
+                />
               </div>
             ))}
           </div>

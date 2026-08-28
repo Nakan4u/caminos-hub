@@ -30,7 +30,11 @@ npm run db:studio           # Prisma Studio GUI
 
 **`src/data/official-routes.ts` is the single source of truth** for route/stage data — a typed, hand-authored TS file, not the database. `prisma/seed.ts` loads it into Postgres; the Vitest suite (`seed-data.test.ts`) validates it directly against this file with no database involved (unique slugs, stages chaining end-to-end, stage distances summing within 5% of the stated total, geocodable place names).
 
-Data flow for a filtered page load: `searchParams` → `src/lib/filters.ts` (`RouteFilters` parse, pure) → `src/lib/route-query.ts` (`RouteFilters` → Prisma `where`/`orderBy`, pure) → `src/lib/routes.ts` (the only module that touches the database, marked `server-only`) → Server Component.
+Data flow for a filtered page load: `searchParams` → `src/lib/filters.ts` (`RouteFilters` parse, pure) → `src/lib/route-query.ts` (`RouteFilters` → Prisma `where`/`orderBy`, pure) → `src/lib/routes.ts` (`server-only`, touches the database) → Server Component.
+
+The database is touched only by `src/lib/routes.ts`, `src/lib/user-routes.ts` (both `server-only`), and the Auth.js Prisma adapter inside `src/auth.ts`. Everything else stays pure.
+
+**Auth** (Auth.js / NextAuth v5, config in `src/auth.ts`): Credentials (email + password, `bcryptjs`) + Google. `session.strategy` is `jwt` — forced by the Credentials provider, so `Session`/`VerificationToken` tables exist but are unused, and `AUTH_SECRET` must be stable. `User`/`Account`/`Session` use `String @default(cuid())` PKs (Auth.js adapter contract), a deliberate break from this schema's `Int autoincrement` style; `UserRoute` keeps `Int`. Auth flow: form → `src/lib/actions/*` (`'use server'`, each re-checks the session — a Server Action is a public endpoint) → `src/lib/auth-validation.ts` / `src/lib/route-status.ts` (pure, unit-tested) → `src/lib/user-routes.ts` (`server-only`, DB) → `src/lib/localize.ts` → component. `src/lib/auth-dal.ts` (`getCurrentUser`, cached; `requireUser`) is the authorization choke point — check auth there or in the page/action, **never** gate rendering in `layout.tsx` (it doesn't re-render on navigation). `src/proxy.ts` stays pure next-intl; `/api/auth/*` is outside its matcher so those endpoints aren't locale-prefixed. Registration is hand-rolled (`registerAction`) — NextAuth has no signup. NextAuth is pinned to an exact beta (`5.0.0-beta.32`); betas break between patches.
 
 **Filters live in the URL** (`?difficulty=HARD&maxDays=20`), parsed server-side — every filtered view is a shareable link and there's no client state library for it. Keep the filter parse/query-build split pure and testable (see `src/__tests__/filters.test.ts`, `route-query.test.ts`) rather than folding query logic into components or route handlers.
 
@@ -50,4 +54,6 @@ The `20260826211238_add_translation_tables` migration is destructive: it drops t
 
 ## Scope notes
 
-No maps, accommodation data, or user accounts — see README "Not in this version" before adding any of these. `Stage` has no `lat`/`lng` yet; a future map feature would add nullable columns and a geocoding script, not a new data source.
+No maps or accommodation data — see README "Not in this version" before adding either. `Stage` has no `lat`/`lng` yet; a future map feature would add nullable columns and a geocoding script, not a new data source.
+
+User accounts exist (email+password + Google) with per-user PLANNED/COMPLETED route lists, but deliberately no email verification, password reset, or transactional email — there's no mail provider. The `20260828114521_add_auth_and_user_routes` migration is purely additive (new tables only), so it needs no re-seed.

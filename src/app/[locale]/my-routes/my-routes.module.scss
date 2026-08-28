@@ -1,0 +1,18 @@
+@use '../../../styles/tokens' as *;
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.heading {
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.empty {
+  color: var(--color-text-soft);
+  font-size: 0.9rem;
+  margin: 0;
+}

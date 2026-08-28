@@ -4,6 +4,10 @@
     "metaDescription": "Browse, filter and compare the official Camino de Santiago routes: distance, days, difficulty and full stage lists.",
     "navAllRoutes": "All routes",
     "navCompare": "Compare",
+    "navMyRoutes": "My routes",
+    "navSignIn": "Sign in",
+    "navSignOut": "Sign out",
+    "menuGreeting": "Hi, {name}",
     "footerLine1": "Camino-Hub lists the officially recognised routes of the Camino de Santiago.",
     "footerLine2": "Distances and stage divisions follow common guidebook conventions and are approximate. Always carry a current guide and check conditions locally before setting out."
   },
@@ -146,5 +150,55 @@
   },
   "LocaleSwitcher": {
     "ariaLabel": "Language"
+  },
+  "Auth": {
+    "metaTitleLogin": "Sign in",
+    "metaTitleRegister": "Create an account",
+    "loginTitle": "Sign in",
+    "loginLede": "Sign in to save routes you want to walk and mark the ones you've finished.",
+    "registerTitle": "Create an account",
+    "registerLede": "One account to track the routes you're planning and the ones you've walked.",
+    "labelName": "Name (optional)",
+    "labelEmail": "Email",
+    "labelPassword": "Password",
+    "loginSubmit": "Sign in",
+    "registerSubmit": "Create account",
+    "googleButton": "Continue with Google",
+    "orDivider": "or",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Need an account?",
+    "toLogin": "Sign in",
+    "toRegister": "Register",
+    "errors": {
+      "EMAIL_INVALID": "Enter a valid email address.",
+      "EMAIL_TAKEN": "An account with this email already exists.",
+      "PASSWORD_TOO_SHORT": "Use at least 8 characters.",
+      "PASSWORD_TOO_LONG": "Passwords can be at most 72 characters.",
+      "PASSWORD_REQUIRED": "Enter your password.",
+      "NAME_TOO_LONG": "That name is too long.",
+      "INVALID_CREDENTIALS": "That email and password don't match.",
+      "SIGNIN_FAILED": "Your account was created but sign-in failed. Try signing in.",
+      "OAUTH_ACCOUNT_NOT_LINKED": "This email is already registered. Sign in the way you signed up.",
+      "UNKNOWN": "Something went wrong. Please try again."
+    }
+  },
+  "MyRoutes": {
+    "metaTitle": "My routes",
+    "metaDescription": "The Camino routes you're planning to walk and the ones you've finished.",
+    "eyebrow": "Your Camino",
+    "title": "My routes",
+    "lede": "Routes you've saved to walk, and the ones you've marked as done.",
+    "plannedHeading": "Planning to walk",
+    "walkedHeading": "Walked",
+    "plannedEmpty": "No routes saved yet. Browse the catalog and mark one “Want to walk”.",
+    "walkedEmpty": "Nothing marked as walked yet.",
+    "browseLink": "Browse all routes"
+  },
+  "RouteListControl": {
+    "wantToWalk": "Want to walk",
+    "walked": "Walked",
+    "clear": "Remove",
+    "signInToSave": "Sign in to save",
+    "savingLabel": "Save this route to your lists"
   }
 }

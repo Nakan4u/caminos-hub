@@ -1,11 +1,21 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { RouteSummary } from '@/lib/routes'
+import type { RouteListStatus } from '@/lib/route-status'
 import { DifficultyBadge } from './DifficultyBadge'
 import { CompareToggle } from './CompareToggle'
+import { RouteListControl } from './RouteListControl'
 import styles from './RouteCard.module.scss'
 
-export async function RouteCard({ route }: { route: RouteSummary }) {
+export async function RouteCard({
+  route,
+  listStatus = null,
+  isLoggedIn = false,
+}: {
+  route: RouteSummary
+  listStatus?: RouteListStatus | null
+  isLoggedIn?: boolean
+}) {
   const t = await getTranslations('RouteCard')
   const tFormat = await getTranslations('Format')
   const tCountries = await getTranslations('Countries')
@@ -51,6 +61,16 @@ export async function RouteCard({ route }: { route: RouteSummary }) {
         <DifficultyBadge difficulty={route.difficulty} />
         <CompareToggle slug={route.slug} />
       </div>
+
+      {(isLoggedIn || listStatus !== null) && (
+        <div className={styles.listControl}>
+          <RouteListControl
+            slug={route.slug}
+            status={listStatus}
+            isLoggedIn={isLoggedIn}
+          />
+        </div>
+      )}
     </article>
   )
 }

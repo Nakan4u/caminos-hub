@@ -1,13 +1,8 @@
 import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { buildRouteQuery } from '@/lib/route-query'
-import { localizeRoute, localizeStage } from '@/lib/localize'
+import { localeAndFallback, localizeRoute, localizeStage } from '@/lib/localize'
 import type { RouteFilters } from '@/lib/filters'
-
-/** Locale plus its English fallback, deduped — `resolveField` only ever needs these two rows. */
-function localeAndFallback(locale: string): string[] {
-  return locale === 'en' ? ['en'] : [locale, 'en']
-}
 
 export async function listRoutes(filters: RouteFilters, locale: string) {
   const { where, orderBy } = buildRouteQuery(filters, locale)
