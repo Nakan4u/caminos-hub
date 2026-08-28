@@ -199,6 +199,7 @@
     "walked": "Walked",
     "clear": "Remove",
     "signInToSave": "Sign in to save",
-    "savingLabel": "Save this route to your lists"
+    "savingLabel": "Save this route to your lists",
+    "saveError": "Couldn't save that. Try again."
   }
 }

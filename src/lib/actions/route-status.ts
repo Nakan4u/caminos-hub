@@ -19,7 +19,9 @@ export async function setRouteStatusAction(
   if (typeof slug !== 'string' || !slug) return { error: 'BAD_REQUEST' }
   if (typeof status !== 'string' || !isRouteListStatus(status)) return { error: 'BAD_REQUEST' }
 
-  await setRouteStatus(user.id, slug, status)
+  const applied = await setRouteStatus(user.id, slug, status)
+  if (!applied) return { error: 'BAD_REQUEST' }
+
   revalidatePath('/[locale]/my-routes', 'page')
   return { ok: true }
 }

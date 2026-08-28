@@ -4,9 +4,9 @@ import { localeAndFallback, localizeRoute, type LocalizedRoute } from '@/lib/loc
 import type { RouteListStatus } from '@/lib/route-status'
 
 /**
- * Per-user saved-route data access. The second module (besides `src/lib/routes.ts`,
- * and the Auth.js adapter in `src/auth.ts`) allowed to touch the database. Every
- * export is async and returns already-localized plain objects.
+ * Per-user saved-route data access. One of the modules (with `src/lib/routes.ts`,
+ * `src/lib/users.ts`, and the Auth.js adapter in `src/auth.ts`) allowed to touch
+ * the database. Every export is async and returns already-localized plain objects.
  */
 
 /** `{ [routeSlug]: status }` for every route the user has saved — hydrates the catalog/detail controls. */
@@ -59,20 +59,23 @@ export async function listUserRoutes(
 }
 
 /** Upsert the user's status for a route. A single row per (user, route) — marking
- *  COMPLETED overwrites PLANNED, so the route leaves the planned list automatically. */
+ *  COMPLETED overwrites PLANNED, so the route leaves the planned list automatically.
+ *  Returns `false` when the slug matches no route, so the caller can report a bad
+ *  request rather than surface a 500. */
 export async function setRouteStatus(
   userId: string,
   slug: string,
   status: RouteListStatus,
-): Promise<void> {
+): Promise<boolean> {
   const route = await prisma.route.findUnique({ where: { slug }, select: { id: true } })
-  if (!route) throw new Error(`Unknown route slug: ${slug}`)
+  if (!route) return false
 
   await prisma.userRoute.upsert({
     where: { userId_routeId: { userId, routeId: route.id } },
     update: { status },
     create: { userId, routeId: route.id, status },
   })
+  return true
 }
 
 /** Remove a route from the user's lists. No-op when it wasn't saved. */

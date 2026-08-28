@@ -2,10 +2,9 @@
 
 import { AuthError } from 'next-auth'
 import { hasLocale } from 'next-intl'
-import { Prisma } from '@/generated/prisma/client'
 import bcrypt from 'bcryptjs'
 import { signIn, signOut } from '@/auth'
-import { prisma } from '@/lib/prisma'
+import { createCredentialsUser } from '@/lib/users'
 import { validateLogin, validateRegistration } from '@/lib/auth-validation'
 import { routing } from '@/i18n/routing'
 import { redirect } from '@/i18n/navigation'
@@ -58,14 +57,8 @@ export async function registerAction(
   const { email, password, name } = result.data
   const passwordHash = await bcrypt.hash(password, 10)
 
-  try {
-    await prisma.user.create({ data: { email, name, passwordHash } })
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return { errors: { email: 'EMAIL_TAKEN' }, values }
-    }
-    throw error
-  }
+  const created = await createCredentialsUser({ email, name, passwordHash })
+  if (!created.ok) return { errors: { email: 'EMAIL_TAKEN' }, values }
 
   try {
     await signIn('credentials', { email, password, redirect: false })

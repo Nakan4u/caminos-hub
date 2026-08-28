@@ -1,12 +1,13 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { ROUTE_LIST_STATUSES, type RouteListStatus } from '@/lib/route-status'
 import {
   clearRouteStatusAction,
   setRouteStatusAction,
+  type RouteStatusActionResult,
 } from '@/lib/actions/route-status'
 import styles from './RouteListControl.module.scss'
 
@@ -25,6 +26,7 @@ export function RouteListControl({ slug, status, isLoggedIn }: Props) {
   const t = useTranslations('RouteListControl')
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const [failed, setFailed] = useState(false)
 
   if (!isLoggedIn) {
     return (
@@ -34,10 +36,13 @@ export function RouteListControl({ slug, status, isLoggedIn }: Props) {
     )
   }
 
-  function run(work: () => Promise<unknown>) {
+  function run(work: () => Promise<RouteStatusActionResult>) {
+    setFailed(false)
     startTransition(async () => {
-      await work()
+      const result = await work()
+      // A refresh re-reads the session, so an expired login re-renders as "Sign in to save".
       router.refresh()
+      if ('error' in result) setFailed(true)
     })
   }
 
@@ -73,6 +78,11 @@ export function RouteListControl({ slug, status, isLoggedIn }: Props) {
         >
           {t('clear')}
         </button>
+      )}
+      {failed && (
+        <p className={styles.error} role="alert">
+          {t('saveError')}
+        </p>
       )}
     </div>
   )

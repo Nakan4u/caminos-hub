@@ -80,6 +80,7 @@ src/
 │   ├── route-query.ts        RouteFilters -> Prisma where/orderBy, pure
 │   ├── routes.ts             Route reads — touches the database
 │   ├── user-routes.ts        Per-user saved-route reads/writes — touches the database
+│   ├── users.ts              Credentials-signup user write — touches the database
 │   ├── auth-dal.ts           getCurrentUser / requireUser — the authz choke point
 │   ├── auth-validation.ts    Credentials-form input validation, pure
 │   ├── route-status.ts       PLANNED | COMPLETED guard, pure
