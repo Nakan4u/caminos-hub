@@ -101,6 +101,22 @@ export default async function RootLayout({
             <div className="container py-4">
               <p className="mb-1">{t('footerLine1')}</p>
               <p className="mb-0">{t('footerLine2')}</p>
+              <div className="site-footer__copyright mt-3">
+                <p className="mb-1">
+                  {t.rich('footerSource', {
+                    link: (chunks) => (
+                      <a
+                        href="https://oficinadelperegrino.com/en/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
+                </p>
+                <p className="mb-0">{t('footerCopyright', { year: new Date().getFullYear() })}</p>
+              </div>
             </div>
           </footer>
 

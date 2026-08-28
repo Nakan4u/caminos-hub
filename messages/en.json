@@ -10,6 +10,8 @@
     "menuGreeting": "Hi, {name}",
     "footerLine1": "Camino-Hub lists the officially recognised routes of the Camino de Santiago.",
     "footerLine2": "Distances and stage divisions follow common guidebook conventions and are approximate. Always carry a current guide and check conditions locally before setting out.",
+    "footerCopyright": "© {year} Camino-Hub. All rights reserved.",
+    "footerSource": "Route and stage data are compiled from public guidebooks and the <link>Pilgrim's Reception Office</link> in Santiago de Compostela.",
     "navSettings": "Settings"
   },
   "NotFound": {
