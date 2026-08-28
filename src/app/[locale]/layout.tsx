@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { Inter, Lora } from 'next/font/google'
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -14,6 +15,20 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { ThemeBootstrap } from '@/components/ThemeBootstrap'
 import { AuthMenu, AuthMenuFallback } from '@/components/AuthMenu'
 import { THEME_COOKIE, parseTheme } from '@/lib/theme'
+
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-sans',
+})
+
+const lora = Lora({
+  subsets: ['latin', 'cyrillic'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-serif',
+})
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -52,7 +67,12 @@ export default async function RootLayout({
   const storedTheme = parseTheme(cookieStore.get(THEME_COOKIE)?.value)
 
   return (
-    <html lang={locale} data-theme={storedTheme ?? 'light'}>
+    <html
+      lang={locale}
+      data-theme={storedTheme ?? 'light'}
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${lora.variable}`}
+    >
       <body>
         <NextIntlClientProvider>
           <header className="site-header">
