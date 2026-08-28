@@ -4,6 +4,8 @@ import { Link } from '@/i18n/navigation'
 import { requireUser } from '@/lib/auth-dal'
 import { listUserRoutes } from '@/lib/user-routes'
 import { RouteCard } from '@/components/RouteCard'
+import { CompareProvider } from '@/components/CompareProvider'
+import { CompareBar } from '@/components/CompareBar'
 import type { LocalizedRoute } from '@/lib/localize'
 import styles from './my-routes.module.scss'
 
@@ -59,8 +61,12 @@ export default async function MyRoutesPage({
         <p className="page-lede">{t('lede')}</p>
       </header>
 
-      {section(t('plannedHeading'), t('plannedEmpty'), planned, 'PLANNED')}
-      {section(t('walkedHeading'), t('walkedEmpty'), completed, 'COMPLETED')}
+      <CompareProvider>
+        {section(t('plannedHeading'), t('plannedEmpty'), planned, 'PLANNED')}
+        {section(t('walkedHeading'), t('walkedEmpty'), completed, 'COMPLETED')}
+
+        <CompareBar />
+      </CompareProvider>
 
       <Link href="/" className="btn btn-outline-secondary mt-2">
         {t('browseLink')}
