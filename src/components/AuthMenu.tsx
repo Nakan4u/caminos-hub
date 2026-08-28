@@ -18,7 +18,9 @@ export async function AuthMenu({ locale }: { locale: string }) {
   return (
     <div className={styles.menu}>
       <Link href="/my-routes">{t('navMyRoutes')}</Link>
-      <Avatar src={user.image} name={user.name} email={user.email} />
+      <Link href="/settings" className={styles.avatarLink} aria-label={t('navSettings')}>
+        <Avatar src={user.image} name={user.name} email={user.email} />
+      </Link>
       <span className={styles.greeting}>
         {t('menuGreeting', { name: user.name ?? user.email })}
       </span>

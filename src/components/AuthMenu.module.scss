@@ -6,6 +6,16 @@
   gap: 1rem;
 }
 
+.avatarLink {
+  display: inline-flex;
+  border-radius: 50%;
+  line-height: 0;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
 .greeting {
   font-size: 0.85rem;
   color: var(--color-text-soft);

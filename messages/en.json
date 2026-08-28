@@ -9,7 +9,8 @@
     "navSignOut": "Sign out",
     "menuGreeting": "Hi, {name}",
     "footerLine1": "Camino-Hub lists the officially recognised routes of the Camino de Santiago.",
-    "footerLine2": "Distances and stage divisions follow common guidebook conventions and are approximate. Always carry a current guide and check conditions locally before setting out."
+    "footerLine2": "Distances and stage divisions follow common guidebook conventions and are approximate. Always carry a current guide and check conditions locally before setting out.",
+    "navSettings": "Settings"
   },
   "NotFound": {
     "eyebrow": "Off the waymarked path",
@@ -201,5 +202,52 @@
     "signInToSave": "Sign in to save",
     "savingLabel": "Save this route to your lists",
     "saveError": "Couldn't save that. Try again."
+  },
+  "Settings": {
+    "metaTitle": "Account settings",
+    "metaDescription": "Update your name and avatar, change your password, or delete your account.",
+    "eyebrow": "Your account",
+    "title": "Account settings",
+    "lede": "Update how you show up on Camino-Hub, or close your account.",
+    "backLink": "Back to my routes",
+    "profileHeading": "Profile",
+    "profileLede": "Your name and avatar appear in the site header.",
+    "nameLabel": "Display name",
+    "nameHint": "Leave blank to show your email instead.",
+    "nameSubmit": "Save name",
+    "nameSaved": "Name updated.",
+    "avatarLabel": "Avatar",
+    "avatarHint": "PNG, JPEG or WebP, up to 1 MB.",
+    "avatarSubmit": "Upload avatar",
+    "avatarRemove": "Remove avatar",
+    "avatarSaved": "Avatar updated.",
+    "avatarRemoved": "Avatar removed.",
+    "passwordHeading": "Password",
+    "passwordLede": "Choose a new password for signing in with your email.",
+    "passwordGoogleNote": "You sign in with Google, so there is no password to change.",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "passwordSubmit": "Change password",
+    "passwordSaved": "Password changed.",
+    "dangerHeading": "Delete account",
+    "dangerLede": "This permanently removes your account and your saved routes. This cannot be undone.",
+    "confirmEmailLabel": "Type your email to confirm",
+    "deleteSubmit": "Delete my account",
+    "errors": {
+      "NAME_TOO_LONG": "That name is too long.",
+      "CURRENT_REQUIRED": "Enter your current password.",
+      "PASSWORD_TOO_SHORT": "Use at least 8 characters.",
+      "PASSWORD_TOO_LONG": "Passwords can be at most 72 characters.",
+      "SAME_PASSWORD": "The new password matches your current one.",
+      "WRONG_PASSWORD": "That current password is not correct.",
+      "NO_PASSWORD": "This account has no password to change.",
+      "AVATAR_REQUIRED": "Choose an image file first.",
+      "AVATAR_EMPTY": "That file is empty.",
+      "AVATAR_TOO_LARGE": "That image is larger than 1 MB.",
+      "AVATAR_TYPE": "Use a PNG, JPEG or WebP image.",
+      "EMAIL_MISMATCH": "That does not match your account email.",
+      "NOT_SIGNED_IN": "Your session expired. Sign in again.",
+      "form": "Something went wrong. Please try again."
+    }
   }
 }

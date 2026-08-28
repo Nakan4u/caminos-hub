@@ -94,6 +94,11 @@ model User {
   passwordHash  String?
   emailVerified DateTime?
   image         String?
+  // Uploaded avatar, stored in-row (see docs/superpowers/specs/2026-08-28-user-settings-page-design.md).
+  // `image` above still holds the Google profile-picture URL; `imageData` wins when set.
+  imageData      Bytes?
+  imageType      String?
+  imageUpdatedAt DateTime?
   accounts      Account[]
   sessions      Session[]
   routes        UserRoute[]
