@@ -25,19 +25,7 @@ async function main() {
           ],
         },
         stages: {
-          create: stages.map((stage, index) => {
-            const { fromPlace, toPlace, notes, translations: stageTranslations, ...rest } = stage
-            return {
-              ...rest,
-              order: index + 1,
-              translations: {
-                create: [
-                  { locale: 'en', fromPlace, toPlace, notes },
-                  ...(stageTranslations?.uk ? [{ locale: 'uk', ...stageTranslations.uk }] : []),
-                ],
-              },
-            }
-          }),
+          create: stages.map((stage, index) => ({ ...stage, order: index + 1 })),
         },
       },
     })

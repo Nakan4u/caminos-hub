@@ -1,7 +1,7 @@
 import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { buildRouteQuery } from '@/lib/route-query'
-import { localeAndFallback, localizeRoute, localizeStage } from '@/lib/localize'
+import { localeAndFallback, localizeRoute } from '@/lib/localize'
 import type { RouteFilters } from '@/lib/filters'
 
 export async function listRoutes(filters: RouteFilters, locale: string) {
@@ -25,17 +25,14 @@ export async function getRouteBySlug(slug: string, locale: string) {
     where: { slug },
     include: {
       translations: { where: { locale: { in: localeAndFallback(locale) } } },
-      stages: {
-        orderBy: { order: 'asc' },
-        include: { translations: { where: { locale: { in: localeAndFallback(locale) } } } },
-      },
+      stages: { orderBy: { order: 'asc' } },
     },
   })
   if (!route) return null
 
   return {
     ...localizeRoute(route, locale),
-    stages: route.stages.map((stage) => localizeStage(stage, locale)),
+    stages: route.stages,
   }
 }
 

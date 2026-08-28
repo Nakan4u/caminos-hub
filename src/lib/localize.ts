@@ -1,7 +1,6 @@
-import type { Route, RouteTranslation, Stage, StageTranslation } from '@/generated/prisma/client'
+import type { Route, RouteTranslation } from '@/generated/prisma/client'
 
 type RouteWithTranslations = Route & { translations: RouteTranslation[] }
-type StageWithTranslations = Stage & { translations: StageTranslation[] }
 
 /** Locale plus its English fallback, deduped — the only two translation rows `resolveField` needs. */
 export function localeAndFallback(locale: string): string[] {
@@ -10,7 +9,7 @@ export function localeAndFallback(locale: string): string[] {
 
 /** Every field of `T` picked by `K`, widened by dropping `null` — used for the translated
  *  fields below, which the schema types nullable for future partial translations but which
- *  are always populated on the `en` row that every route/stage falls back to. */
+ *  are always populated on the `en` row that every route falls back to. */
 type NonNullablePick<T, K extends keyof T> = { [P in K]: NonNullable<T[P]> }
 
 export type LocalizedRoute = Pick<
@@ -22,15 +21,11 @@ export type LocalizedRoute = Pick<
     'name' | 'summary' | 'description' | 'startPlace' | 'endPlace' | 'waymarking' | 'bestSeason'
   >
 
-export type LocalizedStage = Pick<Stage, 'order' | 'distanceKm' | 'ascentM'> &
-  NonNullablePick<StageTranslation, 'fromPlace' | 'toPlace'> &
-  Pick<StageTranslation, 'notes'>
-
 /**
  * Resolves one translatable field: the locale's own value, falling back to the English row's.
  * The Prisma schema types these columns nullable (`String?`) so future locales can ship partial
- * translations, but the `en` row is always fully populated — every field here is required and
- * non-nullable on `official-routes.ts`'s canonical English authoring surface (enforced by
+ * translations, but the `en` row is always fully populated — every route field here is required
+ * and non-nullable on `official-routes.ts`'s canonical English authoring surface (enforced by
  * `seed-data.test.ts`) — so the resolved value is asserted non-null.
  */
 function resolveField<T extends { locale: string }, K extends keyof T>(
@@ -40,20 +35,6 @@ function resolveField<T extends { locale: string }, K extends keyof T>(
 ): NonNullable<T[K]> {
   const value = translations.find((t) => t.locale === locale)?.[field] ?? translations.find((t) => t.locale === 'en')![field]
   return value as NonNullable<T[K]>
-}
-
-/**
- * Resolves one translatable field that is genuinely optional even on the English row (e.g.
- * `StageTranslation.notes`, absent for most stages) — the locale's own value falls back to the
- * English row's, but the result may still be `null` if neither has one.
- */
-function resolveNullableField<T extends { locale: string }, K extends keyof T>(
-  translations: T[],
-  locale: string,
-  field: K,
-): T[K] {
-  const value = translations.find((t) => t.locale === locale)?.[field] ?? translations.find((t) => t.locale === 'en')?.[field]
-  return value as T[K]
 }
 
 /** Resolves a Route's translated fields for `locale`, falling back to English per-field, merged with its untranslated structural fields. */
@@ -75,18 +56,5 @@ export function localizeRoute(route: RouteWithTranslations, locale: string): Loc
     endPlace: resolveField(translations, locale, 'endPlace'),
     waymarking: resolveField(translations, locale, 'waymarking'),
     bestSeason: resolveField(translations, locale, 'bestSeason'),
-  }
-}
-
-/** Resolves a Stage's translated fields for `locale`, falling back to English per-field, merged with its untranslated structural fields. */
-export function localizeStage(stage: StageWithTranslations, locale: string): LocalizedStage {
-  const { order, distanceKm, ascentM, translations } = stage
-  return {
-    order,
-    distanceKm,
-    ascentM,
-    fromPlace: resolveField(translations, locale, 'fromPlace'),
-    toPlace: resolveField(translations, locale, 'toPlace'),
-    notes: resolveNullableField(translations, locale, 'notes'),
   }
 }

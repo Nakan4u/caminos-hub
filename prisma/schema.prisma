@@ -44,7 +44,9 @@ model Stage {
   order      Int
   distanceKm Float
   ascentM    Int?
-  translations StageTranslation[]
+  fromPlace  String
+  toPlace    String
+  notes      String?
 
   @@unique([routeId, order])
   @@index([routeId])
@@ -64,19 +66,6 @@ model RouteTranslation {
   bestSeason  String?
 
   @@unique([routeId, locale])
-  @@index([locale])
-}
-
-model StageTranslation {
-  id        Int    @id @default(autoincrement())
-  stageId   Int
-  stage     Stage  @relation(fields: [stageId], references: [id], onDelete: Cascade)
-  locale    String
-  fromPlace String?
-  toPlace   String?
-  notes     String?
-
-  @@unique([stageId, locale])
   @@index([locale])
 }
 
