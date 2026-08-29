@@ -117,28 +117,33 @@ export function RouteMap({ slug, routeNameEs, stages }: Props) {
 
       try {
         const res = await fetch(`/api/routes/${slug}/track`)
-        if (cancelled || !res.ok) return
-        const fc = (await res.json()) as { features: TrackFeature[] }
-        let anyFallback = false
-        for (const feat of fc.features) {
-          if (feat.geometry.coordinates.length < 2) continue
-          const fallback = feat.properties.fallback
-          anyFallback ||= fallback
-          const layer = L.polyline(feat.geometry.coordinates.map(toLatLng), {
-            color: fallback ? COLOR_FALLBACK : COLOR_REAL,
-            weight: 4,
-            dashArray: fallback ? '6 6' : undefined,
-          }).addTo(map)
-          stageLayersRef.current.set(feat.properties.stageOrder, { layer, fallback })
+        if (cancelled || mapRef.current !== map) return
+        if (res.ok) {
+          const fc = (await res.json()) as { features: TrackFeature[] }
+          if (cancelled || mapRef.current !== map) return
+          let anyFallback = false
+          for (const feat of fc.features) {
+            if (feat.geometry.coordinates.length < 2) continue
+            const fallback = feat.properties.fallback
+            anyFallback ||= fallback
+            const layer = L.polyline(feat.geometry.coordinates.map(toLatLng), {
+              color: fallback ? COLOR_FALLBACK : COLOR_REAL,
+              weight: 4,
+              dashArray: fallback ? '6 6' : undefined,
+            }).addTo(map)
+            stageLayersRef.current.set(feat.properties.stageOrder, { layer, fallback })
+          }
+          if (placeholderRef.current && stageLayersRef.current.size > 0) {
+            placeholderRef.current.remove()
+            placeholderRef.current = null
+          }
+          setApproximate(anyFallback)
         }
-        if (placeholderRef.current && stageLayersRef.current.size > 0) {
-          placeholderRef.current.remove()
-          placeholderRef.current = null
-        }
-        setApproximate(anyFallback)
-        setLoaded(true)
       } catch {
         // Network failed — the dashed placeholder stays; downloads still work.
+      } finally {
+        // Clear the "loading" hint even on failure, as long as we're still mounted.
+        if (!cancelled && mapRef.current === map) setLoaded(true)
       }
     })()
 

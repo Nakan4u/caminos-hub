@@ -85,7 +85,8 @@ export function nearestOnPolyline(line: LngLat[], p: LngLat): NearestResult {
     const distToLine = Math.hypot(px - fx, py - fy)
 
     if (!best || distToLine < best.distToLineMeters) {
-      const segLen = haversineMeters(a, b)
+      // Segment length is already the gap between consecutive cumulative offsets.
+      const segLen = cum[i + 1] - cum[i]
       best = {
         point: [fx / mx, fy / my],
         segIndex: i,
@@ -114,7 +115,9 @@ function lerp(a: LngLat, b: LngLat, t: number): LngLat {
  * Always returns at least two points (two coincident points when `start === end`).
  */
 export function sliceByDistance(line: LngLat[], startM: number, endM: number): LngLat[] {
-  if (line.length < 2) return line.length === 1 ? [line[0], line[0]] : []
+  if (line.length < 2) {
+    return line.length === 1 ? [[...line[0]] as LngLat, [...line[0]] as LngLat] : []
+  }
 
   const cum = cumulativeMeters(line)
   const total = cum[cum.length - 1]

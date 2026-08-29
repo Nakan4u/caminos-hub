@@ -224,6 +224,13 @@ async function buildRoute(route: (typeof officialRoutes)[number]): Promise<void>
 
   const elements = await overpass(relationQuery(ids))
   const relations = elements.filter((e): e is OsmRelation => e.type === 'relation')
+  // Overpass returns elements in id order; stitch the curated OSM_RELATIONS order
+  // instead so the greedy chain seeds from the intended first segment. Child
+  // relations (not in `ids`) keep their order after the listed ones.
+  const idOrder = new Map(ids.map((id, i) => [id, i]))
+  relations.sort(
+    (a, b) => (idOrder.get(a.id) ?? ids.length) - (idOrder.get(b.id) ?? ids.length),
+  )
   const waysById = new Map<number, LngLat[]>()
   for (const el of elements) {
     if (el.type === 'way' && el.geometry) {
