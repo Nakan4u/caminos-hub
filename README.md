@@ -30,6 +30,7 @@ open -a Docker           # first time, or after a reboot; wait for Docker Deskto
 npm run db:up            # start Postgres 16 on :5432
 
 npx prisma migrate dev   # create the schema
+npx prisma migrate deploy # migrate to prod
 npx prisma db seed       # load the 15 routes and 191 stages
 
 npm run dev              # http://localhost:3000
