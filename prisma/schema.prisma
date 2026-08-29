@@ -48,8 +48,28 @@ model Stage {
   toPlace    String
   notes      String?
 
+  // Stage-boundary marker coordinates, geocoded from place names by
+  // scripts/geocode-stages.ts. Nullable so the schema can land before geocoding.
+  fromLat Float?
+  fromLng Float?
+  toLat   Float?
+  toLng   Float?
+
+  track StageTrack?
+
   @@unique([routeId, order])
   @@index([routeId])
+}
+
+// Real trail geometry for one stage, sourced from OpenStreetMap route relations
+// by scripts/build-tracks.ts and loaded from src/data/tracks/<slug>.geojson.
+// Kept in its own table so the (potentially large) geometry never rides along
+// with getRouteBySlug — only getRouteTrack selects it.
+model StageTrack {
+  id       Int   @id @default(autoincrement())
+  stageId  Int   @unique
+  stage    Stage @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  geometry Json // GeoJSON LineString: { type: "LineString", coordinates: [[lng, lat], ...] }
 }
 
 model RouteTranslation {

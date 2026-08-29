@@ -54,6 +54,8 @@ The `20260826211238_add_translation_tables` migration is destructive: it drops t
 
 ## Scope notes
 
-No maps or accommodation data — see README "Not in this version" before adding either. `Stage` has no `lat`/`lng` yet; a future map feature would add nullable columns and a geocoding script, not a new data source.
+No accommodation data — see README "Not in this version" before adding it.
+
+**Route map & GPX** (see README "Route map & GPX"): `Stage` has nullable `fromLat/fromLng/toLat/toLng` marker columns (geocoded into the `STAGE_COORDS` dict in `src/data/official-routes.ts` by `scripts/geocode-stages.ts`), plus a one-per-stage `StageTrack` table holding a GeoJSON LineString — loaded by `prisma/seed.ts` from committed `src/data/tracks/<slug>.geojson` files that `scripts/build-tracks.ts` builds from OSM route relations. `StageTrack.geometry` is large and deliberately kept off `getRouteBySlug`; only `getRouteTrack` (`src/lib/routes.ts`) selects it, feeding `GET /api/routes/[slug]/track` (GeoJSON) and `/track.gpx`. Geo maths is pure and unit-tested in `src/lib/geo.ts` / `gpx.ts` / `track.ts` (no `@turf`). `src/components/RouteMap.tsx` is a `'use client'` Leaflet island; stages with no OSM geometry fall back to a straight marker-to-marker line at runtime.
 
 User accounts exist (email+password + Google) with per-user PLANNED/COMPLETED route lists, but deliberately no email verification, password reset, or transactional email — there's no mail provider. The `20260828114521_add_auth_and_user_routes` migration is purely additive (new tables only), so it needs no re-seed.

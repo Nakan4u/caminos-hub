@@ -9,6 +9,8 @@ import { formatPopularity } from '@/lib/format'
 import { DifficultyBadge } from '@/components/DifficultyBadge'
 import { RouteListControl } from '@/components/RouteListControl'
 import { StageTable } from '@/components/StageTable'
+import { RouteMap } from '@/components/RouteMap'
+import { routeHasCoords, toMapStages } from '@/lib/track'
 import styles from './route-detail.module.scss'
 
 export async function generateMetadata({
@@ -129,6 +131,19 @@ export default async function RouteDetailPage({
           </aside>
         </div>
       </div>
+
+      <section className="mt-5">
+        <h2 className={styles.sectionHeading}>{t('mapHeading')}</h2>
+        {routeHasCoords(route.stages) ? (
+          <RouteMap
+            slug={route.slug}
+            routeNameEs={route.nameEs}
+            stages={toMapStages(route.stages)}
+          />
+        ) : (
+          <p className="text-secondary small">{t('mapUnavailable')}</p>
+        )}
+      </section>
 
       <section className="mt-5">
         <h2 className={styles.sectionHeading}>{t('stagesHeading')}</h2>

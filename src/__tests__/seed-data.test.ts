@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { DIFFICULTIES } from '@/lib/filters'
 import { officialRoutes } from '@/data/official-routes'
+import { routeHasCoords } from '@/lib/track'
+import { haversineMeters } from '@/lib/geo'
 
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
+// Bounding box covering Iberia and south-west France, where every stage sits.
+const LAT_RANGE = [35, 52] as const
+const LNG_RANGE = [-10, 5] as const
 
 describe('official route seed data', () => {
   it('contains all fifteen official routes', () => {
@@ -83,6 +89,56 @@ describe('official route seed data', () => {
       }
     }
   })
+
+  it('has geocoded stage coordinates for every route', () => {
+    for (const route of officialRoutes) {
+      expect(routeHasCoords(route.stages), `${route.slug} has no stage coordinates`).toBe(true)
+    }
+  })
+
+  it.each(officialRoutes.map((route) => [route.slug, route] as const))(
+    '%s has chain-consistent stage marker coordinates',
+    (_slug, route) => {
+      for (const stage of route.stages) {
+        const coords = [stage.fromLat, stage.fromLng, stage.toLat, stage.toLng]
+        const anySet = coords.some((c) => c !== undefined)
+        if (!anySet) continue
+
+        for (const c of coords) expect(typeof c === 'number' && Number.isFinite(c)).toBe(true)
+        expect(stage.fromLat!).toBeGreaterThanOrEqual(LAT_RANGE[0])
+        expect(stage.fromLat!).toBeLessThanOrEqual(LAT_RANGE[1])
+        expect(stage.toLat!).toBeGreaterThanOrEqual(LAT_RANGE[0])
+        expect(stage.toLat!).toBeLessThanOrEqual(LAT_RANGE[1])
+        expect(stage.fromLng!).toBeGreaterThanOrEqual(LNG_RANGE[0])
+        expect(stage.fromLng!).toBeLessThanOrEqual(LNG_RANGE[1])
+        expect(stage.toLng!).toBeGreaterThanOrEqual(LNG_RANGE[0])
+        expect(stage.toLng!).toBeLessThanOrEqual(LNG_RANGE[1])
+      }
+
+      // Each stage must start exactly where the previous one ended.
+      for (let i = 1; i < route.stages.length; i += 1) {
+        expect(route.stages[i].fromLat).toBe(route.stages[i - 1].toLat)
+        expect(route.stages[i].fromLng).toBe(route.stages[i - 1].toLng)
+      }
+
+      expect(Number.isFinite(route.stages[0].fromLat)).toBe(true)
+      expect(Number.isFinite(route.stages.at(-1)!.toLat)).toBe(true)
+
+      // Straight-line endpoint distance can never exceed the walked distance;
+      // a wrong geocode blows this up. Allow generous slack for marker drift.
+      for (const stage of route.stages) {
+        const straightKm =
+          haversineMeters(
+            [stage.fromLng!, stage.fromLat!],
+            [stage.toLng!, stage.toLat!],
+          ) / 1000
+        expect(
+          straightKm,
+          `${route.slug} ${stage.fromPlace}→${stage.toPlace}: ${straightKm.toFixed(1)} km straight vs ${stage.distanceKm} km walked`,
+        ).toBeLessThan(stage.distanceKm * 1.4 + 4)
+      }
+    },
+  )
 
   it('only defines non-blank Ukrainian sub-fields wherever translations.uk is present', () => {
     for (const route of officialRoutes) {

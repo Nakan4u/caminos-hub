@@ -170,9 +170,45 @@ transactional email (there's no mail provider). Sessions are JWT-cookie based
 (forced by the Credentials provider), so `AUTH_SECRET` must be stable across
 restarts and deploys.
 
+## Route map & GPX
+
+Each route detail page shows a Leaflet map over free OpenStreetMap tiles, and lets
+you download the whole route — or just the stages between two points you click —
+as a GPX track.
+
+**Stage marker coordinates** live in `src/data/official-routes.ts` as a
+`STAGE_COORDS` dictionary (place name → `[lng, lat]`), written by
+`scripts/geocode-stages.ts` (Nominatim) and checked by `seed-data.test.ts`
+(valid range, chain-consistent, straight-line distance never exceeding the walked
+distance). **Trail geometry** is one GeoJSON LineString per stage in
+`src/data/tracks/<slug>.geojson`, built by `scripts/build-tracks.ts` from
+OpenStreetMap route relations (`OSM_RELATIONS` in that file) via the Overpass API,
+stitched and cut at the stage boundaries. `prisma/seed.ts` loads those files into
+the `StageTrack` table; `getRouteTrack` in `src/lib/routes.ts` serves them through
+`GET /api/routes/[slug]/track` (GeoJSON) and `GET /api/routes/[slug]/track.gpx`
+(`?from=&to=` for a stage range).
+
+OSM's Camino coverage is uneven. Any stage without usable geometry — no relation,
+a big gap, or a marker sitting too far off the mapped way — **falls back to a
+straight line between its markers**, in the map and the GPX alike; the map flags
+this. Improve a route by adding or fixing its `OSM_RELATIONS` entry and re-running
+`build-tracks.ts` — no code changes.
+
+Regenerating the data (rare — the results are committed; be a good Nominatim /
+Overpass citizen, 1 req/s, real User-Agent):
+
+```bash
+npx tsx scripts/geocode-stages.ts          # → STAGE_COORDS, review the git diff
+npx tsx scripts/build-tracks.ts [slug ...]  # → src/data/tracks/*.geojson, eyeball on geojson.io
+npx prisma db seed                          # load coordinates + tracks into Postgres
+npm test
+```
+
+OSM data is ODbL: the map keeps the "© OpenStreetMap contributors" attribution and
+exported GPX carries an ODbL `<copyright>`. Tiles are rendered from OSM's public
+tile server at fair-use volume — swap to a paid provider if traffic grows.
+
 ## Not in this version
 
-Maps and accommodation data. A route map is the intended next step: `Stage` would
-gain nullable `lat`/`lng`, populated by a one-off geocoding script and drawn with
-Leaflet over free OpenStreetMap tiles. Stage place names are already kept clean so
-that script will work without manual cleanup.
+Accommodation data. Elevation profiles. Turn-by-turn navigation — the GPX is a
+route line, not routing instructions.

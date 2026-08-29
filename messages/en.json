@@ -42,7 +42,9 @@
     "waymarking": "Waymarking",
     "bestSeason": "Best season",
     "stagesHeading": "Stages",
-    "stagesIntro": "The conventional stage division. Distances over 30 km are highlighted — those are the days worth planning around."
+    "stagesIntro": "The conventional stage division. Distances over 30 km are highlighted — those are the days worth planning around.",
+    "mapHeading": "Route map",
+    "mapUnavailable": "A route map isn't available for this route yet."
   },
   "Compare": {
     "metaTitle": "Compare routes",
@@ -251,5 +253,15 @@
       "NOT_SIGNED_IN": "Your session expired. Sign in again.",
       "form": "Something went wrong. Please try again."
     }
+  },
+  "RouteMap": {
+    "loading": "Loading the trail…",
+    "selectHint": "Click a point on the map, then another, to pick a range of stages to download.",
+    "selectedStages": "Stages {fromStage}–{toStage} selected.",
+    "downloadWhole": "Download whole route (GPX)",
+    "downloadRange": "Download stages {fromStage}–{toStage} (GPX)",
+    "clearSelection": "Clear selection",
+    "approximateNotice": "Some stages show an approximate straight line where detailed trail data isn't available yet.",
+    "attribution": "Trail geometry & map data © OpenStreetMap contributors (ODbL)."
   }
 }
