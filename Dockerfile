@@ -18,11 +18,15 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# `next build` evaluates route modules (e.g. /api/avatar/[id]) to collect page
-# data, which constructs the Prisma client at import time. The pg driver
+# The Prisma client is generated to src/generated (prisma/schema.prisma
+# `output`), which is gitignored and therefore absent from the build context.
+# Regenerate it here so the build can resolve `@/generated/prisma/client`.
+# `next build` also evaluates route modules (e.g. /api/avatar/[id]) to collect
+# page data, which constructs the Prisma client at import time. The pg driver
 # adapter only opens a connection lazily on first query, so a syntactically
-# valid but unreachable URL is enough to get through the build — it is never
+# valid but unreachable URL is enough to get through both steps — it is never
 # connected to. The real DATABASE_URL is supplied at container runtime.
+RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npx prisma generate
 RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npm run build
 
 # ---- runner: production-only node_modules + built output ------------------
