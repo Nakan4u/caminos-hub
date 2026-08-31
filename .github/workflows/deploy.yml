@@ -57,15 +57,14 @@ jobs:
       # store without the newline mangling that breaks a pasted multi-line key.
       - name: Restore deploy key
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s' '${{ secrets.DEPLOY_SSH_KEY_B64 }}' | base64 -d > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null && echo "deploy key parsed OK"
+          printf '%s' '${{ secrets.DEPLOY_SSH_KEY_B64 }}' | base64 -d > "$RUNNER_TEMP/deploy_key"
+          chmod 600 "$RUNNER_TEMP/deploy_key"
+          ssh-keygen -y -f "$RUNNER_TEMP/deploy_key" > /dev/null && echo "deploy key parsed OK"
       - uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
-          key_path: ~/.ssh/deploy_key
+          key_path: ${{ runner.temp }}/deploy_key
           script: |
             cd /opt/caminos-hub
             docker compose pull
