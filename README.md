@@ -118,6 +118,12 @@ DATABASE_URL="<prod-connection-string>" npx prisma migrate deploy
 DATABASE_URL="<prod-connection-string>" npx prisma db seed
 ```
 
+## Deploy
+
+The app ships as a Docker image and deploys to a VPS (Postgres + Caddy for automatic HTTPS,
+GitHub Actions builds/pushes/deploys on push to `main`). See [DEPLOY.md](DEPLOY.md) for the
+one-time VPS setup and how redeploys work.
+
 ## Testing
 
 ```bash

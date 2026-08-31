@@ -1,0 +1,36 @@
+# Production stack for the VPS. Local dev does NOT use this file — it keeps
+# using `npm run db:up` (a plain `docker run` Postgres container) alongside
+# `npm run dev`. See DEPLOY.md for the one-time VPS setup this file assumes.
+services:
+  app:
+    image: ghcr.io/nakan4u/caminos-hub:latest
+    env_file: .env
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    env_file: .env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
