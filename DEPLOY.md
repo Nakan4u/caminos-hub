@@ -82,7 +82,7 @@ issues successfully, then visit `https://<your-domain>`.
 
 ## 6. Wire up automatic deploys
 
-Generate a dedicated SSH keypair for GitHub Actions to deploy with:
+Generate a dedicated SSH keypair for GitHub Actions to deploy with, on the VPS:
 
 ```bash
 ssh-keygen -t ed25519 -f ~/.ssh/caminos_hub_deploy -N ""
@@ -94,16 +94,25 @@ In the GitHub repo (**Settings → Secrets and variables → Actions**), add:
 | Secret | Value |
 | --- | --- |
 | `DEPLOY_SSH_HOST` | VPS IP or hostname |
-| `DEPLOY_SSH_USER` | the user set up above |
-| `DEPLOY_SSH_KEY` | contents of `~/.ssh/caminos_hub_deploy` (the private key) |
+| `DEPLOY_SSH_USER` | the user set up above (`root` on a default Hetzner box) |
+| `DEPLOY_SSH_KEY_B64` | the private key, base64-encoded to one line |
+
+The key goes in **base64** because a pasted multi-line PEM reliably loses its
+newlines in transit and `drone-ssh` then fails with `ssh: no key found`. The
+`deploy` job decodes it back to a file and points the action at it via
+`key_path`. Set it in one shot from your workstation:
+
+```bash
+ssh <user>@<host> 'base64 -w0 ~/.ssh/caminos_hub_deploy' | gh secret set DEPLOY_SSH_KEY_B64
+```
 
 The `.github/workflows/deploy.yml` workflow builds, tests, pushes the image to
 `ghcr.io/nakan4u/caminos-hub`, and deploys on every push to `main`.
 
-The first time the workflow pushes an image, make its GHCR package public
-(**Package settings → Change visibility**) — the VPS pulls it without registry credentials, so
-it needs to be public (nothing sensitive lives in the image; secrets live only in `.env` on the
-VPS).
+The VPS pulls the image anonymously, so the GHCR package must be public. It
+inherits the repo's visibility on first push; if the repo is private, make the
+package public under **Package settings → Change visibility**. Nothing sensitive
+is in the image — secrets live only in `.env` on the VPS.
 
 ## Redeploying manually
 
