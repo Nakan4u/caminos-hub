@@ -52,11 +52,20 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      # DEPLOY_SSH_KEY_B64 is the private key base64-encoded to a single line
+      # (`base64 -w0 ~/.ssh/caminos_hub_deploy`), which survives GitHub's secret
+      # store without the newline mangling that breaks a pasted multi-line key.
+      - name: Restore deploy key
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s' '${{ secrets.DEPLOY_SSH_KEY_B64 }}' | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null && echo "deploy key parsed OK"
       - uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          key_path: ~/.ssh/deploy_key
           script: |
             cd /opt/caminos-hub
             docker compose pull
