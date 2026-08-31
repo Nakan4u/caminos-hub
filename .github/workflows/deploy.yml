@@ -6,6 +6,10 @@ on:
 
 env:
   IMAGE: ghcr.io/nakan4u/caminos-hub
+  # Tests need no database (see CLAUDE.md), but `npm ci`'s postinstall runs
+  # `prisma generate`, which loads prisma.config.ts and requires DATABASE_URL
+  # to be resolvable. A syntactically valid dummy is enough — nothing connects.
+  DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
 
 jobs:
   test:
